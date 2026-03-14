@@ -1,4 +1,4 @@
-var CACHE_NAME = 'matekids-v3';
+var CACHE_NAME = 'matekids-v4';
 var ASSETS = [
   './',
   './index.html',
