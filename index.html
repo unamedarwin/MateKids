@@ -203,6 +203,56 @@
     .vop-carry { padding:12px 16px; background:#fef9c3; border-radius:14px; border:1px solid #fde047; font-size:16px; font-weight:700; color:#854d0e; max-width:500px; }
     .vop-counter { padding:12px 16px; background:#f9fafb; border-radius:14px; border:1px solid #e5e7eb; font-size:17px; font-weight:700; color:var(--muted); max-width:500px; }
     .vop-counter.done { color:var(--good); background:#ecfdf5; border-color:#86efac; }
+
+    /* ── Dark mode toggle button ── */
+    #darkToggle { border:0; background:rgba(255,255,255,.20); border-radius:999px; padding:8px 13px; font-size:22px; cursor:pointer; flex-shrink:0; -webkit-tap-highlight-color:transparent; transition:background .15s; }
+    #darkToggle:active { opacity:.7; }
+
+    /* ── Dark mode ── */
+    body.dark { --bg:#0d0d1a; --card:#16162a; --ink:#e5e7eb; --muted:#9ca3af; --line:#2d2d46; --yellow:#2c1e00; --shadow:0 10px 30px rgba(0,0,0,.55); }
+    body.dark { background:var(--bg); color:var(--ink); }
+    body.dark .journey-card { background:linear-gradient(180deg,#1e1e36,#141428); border-color:#2d2d46; color:#e5e7eb; }
+    body.dark .journey-card p { color:#9ca3af; }
+    body.dark .adventure-card { background:linear-gradient(180deg,#1e1e36,#141428); border-color:#2d2d46; }
+    body.dark .adventure-canvas-wrap { background:linear-gradient(180deg,#0d1c30,#0d1e0d); border-color:#1e3448; }
+    body.dark .adventure-canvas { background:linear-gradient(180deg,#0d1c30,#0d1e0d); }
+    body.dark .welcome-banner { background:linear-gradient(135deg,#190c2a,#16162a 55%,#091824); border-color:#3b1e68; }
+    body.dark .welcome-banner h2 { color:#e5e7eb; }
+    body.dark .welcome-banner p { color:#9ca3af; }
+    body.dark .welcome-kicker { background:rgba(255,255,255,.12); color:#a5b4fc; }
+    body.dark .mini-card { background:#1a1a30; border-color:#2d2d46; }
+    body.dark .mode-btn { background:linear-gradient(180deg,#1e1e36,#14142a); color:#e5e7eb; box-shadow:0 8px 20px rgba(0,0,0,.3), inset 0 0 0 2px transparent; }
+    body.dark .mode-btn.active { background:linear-gradient(180deg,#2a2c6e,#3730a3); box-shadow:0 10px 24px rgba(79,70,229,.3), inset 0 0 0 2px #6366f1; }
+    body.dark select, body.dark input[type="number"], body.dark .answer { background:#1a1a30; color:#e5e7eb; border-color:#2d2d46; }
+    body.dark .key { background:#1a1a30; color:#e5e7eb; }
+    body.dark .key:active { background:#2a2a50; }
+    body.dark .operation-badge { background:#2c1e00; color:#fbbf24; }
+    body.dark .innova-box { background:#0e1c36; color:#93c5fd; border-color:#3b82f6; }
+    body.dark .innova-box.result { background:#0a1c12; color:#4ade80; border-color:#16a34a; }
+    body.dark .innova-box.result.correct { background:#0c2618; }
+    body.dark .innova-line { background:#cbd5e1; }
+    body.dark .vop-prompt { background:#181c3c; border-color:#3730a3; color:#a5b4fc; }
+    body.dark .vop-carry { background:#261c00; border-color:#6b3a0a; color:#fcd34d; }
+    body.dark .vop-counter { background:#1a1a30; border-color:#2d2d46; color:#9ca3af; }
+    body.dark .vop-counter.done { background:#0a1e12; border-color:#15803d; color:#4ade80; }
+    body.dark .division-trainer { background:linear-gradient(180deg,#1e1e36,#141428); border-color:#1e2e4e; }
+    body.dark .division-board { background:#141428; border-color:#2d2d46; }
+    body.dark .quot-slot, body.dark .div-field-slot { background:#1a1a30; border-color:#484870; color:#e5e7eb; }
+    body.dark .quot-slot.filled, body.dark .div-field-slot.filled { border-color:#6b7280; }
+    body.dark .division-separator { background:#e5e7eb; }
+    body.dark .division-right .div-divisor { border-bottom-color:#e5e7eb; }
+    body.dark .div-separator-line { background:#6b7280; }
+    body.dark .step-guide { background:#1a1a30; border-color:#2d2d46; }
+    body.dark .step-guide-title { color:#a5b4fc; }
+    body.dark .step-guide-text { color:#e5e7eb; }
+    body.dark .cheer-box { background:linear-gradient(135deg,#091820,#16162a); border-color:#3730a3; }
+    body.dark .cheer-title { color:#a5b4fc; }
+    body.dark .cheer-text { color:#e5e7eb; }
+    body.dark .division-process-ok { background:#0a1e12; color:#4ade80; }
+    body.dark .division-process-bad { background:#280e0e; color:#f87171; }
+    body.dark .pointer-chip, body.dark .adventure-badge, body.dark .step-chip { background:#1a1a30; color:#a5b4fc; }
+    body.dark .division-help { color:#9ca3af; }
+    body.dark label { color:#9ca3af; }
   </style>
 </head>
 <body>
@@ -210,7 +260,10 @@
     <div class="hero">
       <div class="hero-top">
         <div class="hero-brand"><div class="hero-mascot">🦊</div><div><h1>MateKids</h1><p>Aprèn, juga i supera reptes matemàtics cada dia.</p></div></div>
-        <div class="mini-tabs"><div class="mini-tab">Aventura</div><div class="mini-tab">Joc</div><div class="mini-tab">Reptes</div></div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div class="mini-tabs"><div class="mini-tab">Aventura</div><div class="mini-tab">Joc</div><div class="mini-tab">Reptes</div></div>
+          <button id="darkToggle" title="Mode nocturn">🌙</button>
+        </div>
       </div>
       <div class="stats">
         <div class="stat"><strong id="scoreHits">0</strong>Encerts</div>
@@ -1422,6 +1475,7 @@
       for (var i = 0; i < el.modeButtons.length; i++) {
         el.modeButtons[i].onclick = function () { setMode(this.getAttribute('data-mode')); };
       }
+      darkToggleBtn.onclick = toggleDark;
       el.level.onchange = function () { state.level = parseInt(this.value, 10); save(); generateProblem(); };
       el.practiceType.onchange = function () { state.practiceType = this.value; save(); renderAnswerMode(); };
       el.soundToggle.onchange = function () { state.sound = this.value; save(); };
@@ -1474,12 +1528,34 @@
       }
     }
 
+    /* ── Dark mode ── */
+    var darkToggleBtn = document.getElementById('darkToggle');
+
+    function applyDark(on) {
+      if (on) {
+        document.body.classList.add('dark');
+        darkToggleBtn.textContent = '☀️';
+      } else {
+        document.body.classList.remove('dark');
+        darkToggleBtn.textContent = '🌙';
+      }
+    }
+
+    function toggleDark() {
+      var on = !document.body.classList.contains('dark');
+      applyDark(on);
+      try { localStorage.setItem('matekids-dark', on ? '1' : '0'); } catch (e) {}
+    }
+
     /* ── Init ── */
     function init() {
       load();
       el.level.value = String(state.level);
       el.practiceType.value = state.practiceType;
       el.soundToggle.value = state.sound;
+      try {
+        if (localStorage.getItem('matekids-dark') === '1') applyDark(true);
+      } catch (e) {}
       bindEvents();
       refreshMotivation();
       renderStats();
