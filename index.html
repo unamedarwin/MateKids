@@ -7,305 +7,217 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="MateKids">
   <meta name="theme-color" content="#4f46e5">
-  <title>MateKids - Sumes, Restes, Multiplicacions i Divisions</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>MateKids - Aprèn mates jugant</title>
   <style>
     :root {
-      --bg: #f7f8ff;
-      --card: #ffffff;
-      --primary: #4f46e5;
-      --primary-2: #7c3aed;
-      --good: #0f9d58;
-      --bad: #d93025;
-      --ink: #1f2937;
-      --muted: #6b7280;
-      --line: #e5e7eb;
-      --yellow: #fff4bf;
-      --shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
-      --radius: 22px;
+      --bg:#f7f8ff; --card:#fff; --primary:#4f46e5; --good:#0f9d58;
+      --bad:#d93025; --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb;
+      --yellow:#fff4bf; --shadow:0 10px 30px rgba(31,41,55,.08); --radius:22px;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
-    body { min-height: 100vh; }
-    .app { max-width: 920px; margin: 0 auto; padding: 14px 14px 30px; }
-    .hero {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #ec4899);
-      color: white;
-      border-radius: 30px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-    .hero:before, .hero:after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.12);
-      pointer-events: none;
-    }
-    .hero:before { width: 140px; height: 140px; right: -30px; top: -20px; }
-    .hero:after { width: 90px; height: 90px; left: -20px; bottom: -20px; }
-    .hero-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .hero-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .hero-mascot {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12);
-    }
-    .hero h1 { margin: 0 0 8px; font-size: 32px; line-height: 1.1; }
-    .hero p { margin: 0; font-size: 16px; line-height: 1.4; opacity: 0.96; font-weight: 600; }
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
-    .stat { background: rgba(255,255,255,0.18); border-radius: 20px; padding: 12px; text-align: center; backdrop-filter: blur(4px); }
-    .stat strong { display: block; font-size: 22px; }
-    .section { margin-top: 16px; }
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 16px;
-    }
-    .welcome-banner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-      padding: 16px 18px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, #fdf2f8, #eef2ff 55%, #ecfeff);
-      border: 1px solid #e9d5ff;
-    }
-    .welcome-kicker {
-      display: inline-block;
-      margin-bottom: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.85);
-      color: var(--primary);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-    }
-    .welcome-banner h2 {
-      margin: 0 0 6px;
-      font-size: 24px;
-      line-height: 1.15;
-    }
-    .welcome-banner p {
-      margin: 0;
-      color: #4b5563;
-      font-size: 16px;
-      line-height: 1.35;
-      font-weight: 600;
-    }
-    .welcome-stars {
-      font-size: 34px;
-      white-space: nowrap;
-    }
-    .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    @media (min-width: 720px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
-    .mode-btn {
-      border: 0;
-      border-radius: 24px;
-      padding: 16px 10px;
-      background: linear-gradient(180deg, #f8fafc, #eef2ff);
-      color: var(--ink);
-      width: 100%;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-      min-height: 104px;
-      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.10), inset 0 0 0 2px transparent;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .mode-btn.active { background: linear-gradient(180deg, #e0e7ff, #ede9fe); box-shadow: 0 10px 24px rgba(79, 70, 229, 0.18), inset 0 0 0 2px var(--primary); }
-    .mode-btn:active { transform: scale(0.98); }
-    .mode-emoji { display: block; font-size: 28px; margin-bottom: 6px; }
-    .toolbar { display: grid; gap: 10px; margin-bottom: 14px; }
-    .mini-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .mini-tab {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.18);
-      font-size: 13px;
-      font-weight: 800;
-    }
-    @media (min-width: 700px) { .toolbar { grid-template-columns: 1.2fr 1fr 1fr 1fr; } }
-    label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; font-weight: 700; }
-    select, input[type="text"], input[type="number"] {
-      width: 100%; border-radius: 16px; border: 2px solid var(--line); padding: 12px 14px; font-size: 17px; background: #fff;
-    }
-    .primary, .secondary, .ghost {
-      border: 0; border-radius: 18px; padding: 13px 16px; font-size: 17px; font-weight: 700; cursor: pointer;
-    }
-    .primary { background: var(--primary); color: #fff; }
-    .secondary { background: #eef2ff; color: var(--primary); }
-    .ghost { background: #f3f4f6; color: var(--ink); }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .problem {
-      text-align: center; padding: 8px 0 0;
-    }
-    .operation-badge {
-      display: inline-block; padding: 7px 12px; border-radius: 999px; background: var(--yellow); font-weight: 800; font-size: 14px;
-    }
-    .big-problem {
-      font-size: 46px; font-weight: 900; letter-spacing: 1px; margin: 12px 0 10px;
-    }
-    .sub { color: var(--muted); font-size: 16px; margin-top: -2px; font-weight: 600; }
-    .answer-row { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 16px 0 8px; flex-wrap: wrap; }
-    .answer {
-      width: 180px; max-width: 100%; text-align: center; font-size: 30px; font-weight: 900; border-radius: 20px; border: 3px solid #d1d5db; padding: 12px;
-      box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.04);
-    }
-    .feedback {
-      min-height: 28px; text-align: center; font-size: 18px; font-weight: 700; margin-top: 10px;
-    }
-    .good { color: var(--good); }
-    .bad { color: var(--bad); }
-    .lesson-grid { display: grid; gap: 14px; }
-    .journey-grid { display: grid; gap: 14px; }
-    @media (min-width: 840px) { .journey-grid { grid-template-columns: 1fr 1fr 1fr; } }
-    .journey-card {
-      background: linear-gradient(180deg, #ffffff, #f8fafc);
-      border-radius: 22px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      border: 1px solid #e5e7eb;
-      text-align: center;
-    }
-    .journey-icon {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 10px;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      background: linear-gradient(135deg, #ede9fe, #ecfeff);
-    }
-    .journey-card h3 {
-      margin: 0 0 6px;
-      font-size: 18px;
-    }
-    .journey-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.4;
-      font-weight: 600;
-    }
-    @media (min-width: 840px) { .lesson-grid { grid-template-columns: 1.05fr 1fr; } }
-    .mini-card { background: #f9fafb; border-radius: 18px; padding: 14px; border: 1px solid var(--line); }
-    .mini-card h3 { margin: 0 0 10px; font-size: 18px; }
-    .steps { margin: 0; padding-left: 20px; }
-    .steps li { margin: 8px 0; line-height: 1.35; }
-    .keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
-    .key { font-size: 24px; font-weight: 700; border: 0; border-radius: 18px; padding: 16px 0; background: #f3f4f6; cursor: pointer; }
-    .key.wide { grid-column: span 3; }
-    .division-work {
-      display: inline-block; text-align: left; margin: 8px auto 0; font-family: "Courier New", monospace; background: #fff; border: 2px dashed #c7d2fe; border-radius: 18px; padding: 14px;
-      max-width: 100%; overflow-x: auto;
-    }
-    .division-work pre { margin: 0; font-size: 18px; line-height: 1.35; }
-    .step-chip { display: inline-block; background: #eef2ff; color: var(--primary); padding: 7px 10px; border-radius: 999px; margin: 0 6px 6px 0; font-size: 13px; font-weight: 700; }
-    .footer-note { color: var(--muted); font-size: 13px; line-height: 1.45; }
-    .cheer-box {
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #ecfeff, #eef2ff);
-      border: 1px solid #c7d2fe;
-      text-align: center;
-    }
-    .cheer-title {
-      font-size: 13px;
-      color: var(--primary);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 6px;
-    }
-    .cheer-text {
-      font-size: 18px;
-      font-weight: 800;
-      color: #1f2937;
-      line-height: 1.35;
-    }
-    .hidden { display: none; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; -webkit-tap-highlight-color:transparent; }
+    body { min-height:100vh; min-height:100dvh; }
+    .app { max-width:940px; margin:0 auto; padding:14px 14px 30px; padding-bottom:max(30px,env(safe-area-inset-bottom)); }
+
+    /* Hero */
+    .hero { background:linear-gradient(135deg,#6366f1,#8b5cf6 60%,#ec4899); color:#fff; border-radius:30px; padding:20px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+    .hero:before,.hero:after { content:""; position:absolute; border-radius:999px; background:rgba(255,255,255,.12); }
+    .hero:before { width:140px; height:140px; right:-30px; top:-20px; }
+    .hero:after { width:90px; height:90px; left:-20px; bottom:-20px; }
+    .hero-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .hero-brand { display:flex; align-items:center; gap:12px; }
+    .hero-mascot { width:56px; height:56px; border-radius:18px; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:32px; }
+    .hero h1 { margin:0 0 8px; font-size:32px; line-height:1.1; }
+    .hero p { margin:0; font-size:16px; line-height:1.4; font-weight:600; }
+    .mini-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+    .mini-tab { padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.18); font-size:13px; font-weight:800; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
+    .stat { background:rgba(255,255,255,.18); border-radius:20px; padding:12px; text-align:center; }
+    .stat strong { display:block; font-size:22px; }
+    .reward-strip { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .reward-pill { border-radius:999px; padding:10px 12px; background:rgba(255,255,255,.2); font-size:14px; font-weight:800; }
+
+    /* Sections */
+    .section { margin-top:16px; }
+    .card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; }
+    .journey-grid { display:grid; gap:14px; }
+    @media (min-width:840px) { .journey-grid { grid-template-columns:1fr 1fr 1fr; } }
+    .journey-card { background:linear-gradient(180deg,#fff,#f8fafc); border-radius:22px; padding:16px; border:1px solid #e5e7eb; text-align:center; box-shadow:var(--shadow); }
+    .journey-icon { width:60px; height:60px; margin:0 auto 10px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:30px; background:linear-gradient(135deg,#ede9fe,#ecfeff); }
+    .journey-card h3 { margin:0 0 6px; font-size:18px; }
+    .journey-card p { margin:0; color:var(--muted); font-size:14px; line-height:1.4; font-weight:600; }
+
+    /* Adventure */
+    .adventure-card { background:linear-gradient(180deg,#fff,#f8fafc); border-radius:24px; padding:16px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
+    .adventure-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+    .adventure-title { font-size:22px; font-weight:900; margin:0; }
+    .adventure-sub { margin:4px 0 0; color:var(--muted); font-weight:600; font-size:14px; }
+    .adventure-badges { display:flex; gap:8px; flex-wrap:wrap; }
+    .adventure-badge { border-radius:999px; padding:8px 12px; background:#eef2ff; color:var(--primary); font-size:13px; font-weight:800; }
+    .adventure-canvas-wrap { background:linear-gradient(180deg,#eff6ff,#f0fdf4); border-radius:20px; padding:10px; border:1px solid #dbeafe; }
+    .adventure-canvas { width:100%; height:210px; display:block; border-radius:14px; background:linear-gradient(180deg,#dbeafe,#ecfccb); }
+
+    /* Welcome & Mode */
+    .welcome-banner { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; padding:16px 18px; border-radius:24px; background:linear-gradient(135deg,#fdf2f8,#eef2ff 55%,#ecfeff); border:1px solid #e9d5ff; flex-wrap:wrap; }
+    .welcome-kicker { display:inline-block; margin-bottom:6px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.85); color:var(--primary); font-size:12px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; }
+    .welcome-banner h2 { margin:0 0 6px; font-size:24px; line-height:1.15; }
+    .welcome-banner p { margin:0; color:#4b5563; font-size:16px; line-height:1.35; font-weight:600; }
+    .welcome-stars { font-size:34px; white-space:nowrap; }
+    .grid-4 { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    @media (min-width:720px) { .grid-4 { grid-template-columns:repeat(4,1fr); } }
+    .mode-btn { border:0; border-radius:24px; padding:16px 10px; background:linear-gradient(180deg,#f8fafc,#eef2ff); color:var(--ink); width:100%; font-size:18px; font-weight:800; min-height:104px; box-shadow:0 8px 20px rgba(99,102,241,.1), inset 0 0 0 2px transparent; cursor:pointer; transition:box-shadow .15s,background .15s; }
+    .mode-btn.active { background:linear-gradient(180deg,#e0e7ff,#ede9fe); box-shadow:0 10px 24px rgba(79,70,229,.18), inset 0 0 0 2px var(--primary); }
+    .mode-emoji { display:block; font-size:28px; margin-bottom:6px; }
+
+    /* Toolbar */
+    .toolbar { display:grid; gap:10px; margin-bottom:14px; }
+    @media (min-width:700px) { .toolbar { grid-template-columns:1.2fr 1fr 1fr 1fr; } }
+    label { font-size:13px; color:var(--muted); display:block; margin-bottom:6px; font-weight:700; }
+    select,input[type="number"] { width:100%; border-radius:16px; border:2px solid var(--line); padding:12px 14px; font-size:17px; background:#fff; -webkit-appearance:none; }
+
+    /* Buttons */
+    .primary,.secondary,.ghost { border:0; border-radius:18px; padding:13px 16px; font-size:17px; font-weight:700; cursor:pointer; transition:opacity .15s; }
+    .primary:active,.secondary:active,.ghost:active { opacity:.7; }
+    .primary { background:var(--primary); color:#fff; }
+    .secondary { background:#eef2ff; color:var(--primary); }
+    .ghost { background:#f3f4f6; color:var(--ink); }
+
+    /* Problem */
+    .problem { text-align:center; padding:8px 0 0; }
+    .operation-badge { display:inline-block; padding:7px 12px; border-radius:999px; background:var(--yellow); font-weight:800; font-size:14px; }
+    .big-problem { font-size:46px; font-weight:900; letter-spacing:1px; margin:12px 0 10px; }
+    .sub { color:var(--muted); font-size:16px; margin-top:-2px; font-weight:600; }
+    .answer-row { display:flex; gap:10px; justify-content:center; align-items:center; margin:16px 0 8px; flex-wrap:wrap; }
+    .answer { width:180px; max-width:100%; text-align:center; font-size:30px; font-weight:900; border-radius:20px; border:3px solid #d1d5db; padding:12px; box-shadow:inset 0 2px 8px rgba(15,23,42,.04); }
+    .feedback { min-height:28px; text-align:center; font-size:18px; font-weight:700; margin-top:10px; }
+    .good { color:var(--good); } .bad { color:var(--bad); }
+
+    /* Lesson */
+    .lesson-grid { display:grid; gap:14px; }
+    @media (min-width:840px) { .lesson-grid { grid-template-columns:1.05fr 1fr; } }
+    .mini-card { background:#f9fafb; border-radius:18px; padding:14px; border:1px solid var(--line); }
+    .mini-card h3 { margin:0 0 10px; font-size:18px; }
+    .steps { margin:0; padding-left:20px; }
+    .steps li { margin:8px 0; line-height:1.35; }
+
+    /* Numeric keypad */
+    .keys { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+    .key { font-size:24px; font-weight:700; border:0; border-radius:18px; padding:16px 0; background:#f3f4f6; cursor:pointer; transition:background .1s; }
+    .key:active { background:#dbeafe; }
+    .key.wide { grid-column:span 3; }
+    .step-chip { display:inline-block; background:#eef2ff; color:var(--primary); padding:7px 10px; border-radius:999px; margin:0 6px 6px 0; font-size:13px; font-weight:700; }
+
+    /* Cheer */
+    .cheer-box { margin-top:14px; padding:14px; border-radius:20px; background:linear-gradient(135deg,#ecfeff,#eef2ff); border:1px solid #c7d2fe; text-align:center; }
+    .cheer-title { font-size:13px; color:var(--primary); font-weight:800; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+    .cheer-text { font-size:18px; font-weight:800; color:#1f2937; line-height:1.35; }
+    .hidden { display:none; }
+
+    /* ── Division trainer ── */
+    .division-trainer { background:linear-gradient(180deg,#fff,#f8fafc); border:1px solid #dbeafe; border-radius:24px; padding:16px; margin-top:14px; }
+    .division-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .division-head h3 { margin:0 0 4px; font-size:22px; }
+    .division-head p { margin:0; color:var(--muted); font-weight:600; }
+    .pointer-chip { display:inline-block; padding:8px 12px; border-radius:999px; background:#eef2ff; color:var(--primary); font-weight:800; font-size:14px; }
+
+    /* Division board - European/Spanish format */
+    .division-board { margin-top:14px; border-radius:20px; background:#fff; border:1px solid #e5e7eb; padding:20px; overflow-x:auto; }
+    .division-layout { display:flex; gap:0; font-family:"Courier New",monospace; font-size:28px; font-weight:900; line-height:1.6; min-width:280px; }
+    .division-left { position:relative; min-width:80px; text-align:right; padding-right:12px; }
+    .division-separator { width:3px; background:#1f2937; flex-shrink:0; align-self:stretch; border-radius:2px; }
+    .division-right { padding-left:12px; min-width:60px; }
+    .division-right .div-divisor { border-bottom:3px solid #1f2937; padding-bottom:4px; margin-bottom:4px; }
+    .division-right .div-quotient-row { display:flex; gap:6px; min-height:42px; align-items:center; }
+    .quot-slot { width:38px; height:42px; border-radius:10px; border:2px dashed #cbd5e1; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; background:#f8fafc; }
+    .quot-slot.filled { border-style:solid; border-color:var(--primary); background:#eef2ff; }
+    .quot-slot.active { border-color:var(--primary); border-style:solid; box-shadow:0 0 0 3px rgba(79,70,229,.15); animation:pulse-slot 1.2s infinite; }
+    @keyframes pulse-slot { 0%,100%{box-shadow:0 0 0 3px rgba(79,70,229,.15)} 50%{box-shadow:0 0 0 6px rgba(79,70,229,.25)} }
+    .quot-slot.correct { border-color:var(--good); background:#ecfdf5; }
+    .quot-slot.wrong { border-color:var(--bad); background:#fef2f2; }
+
+    /* Work steps under dividend */
+    .div-dividend { font-size:28px; }
+    .div-work-line { font-size:24px; min-height:32px; display:flex; align-items:center; justify-content:flex-end; gap:2px; }
+    .div-work-line.subtract { color:var(--primary); }
+    .div-work-line .work-dash { display:block; height:2px; background:#94a3b8; margin:2px 0; }
+    .div-separator-line { height:2px; background:#94a3b8; margin:2px 0 2px auto; border-radius:1px; }
+
+    /* Work field slots in the left column */
+    .div-field-slot { display:inline-flex; min-width:36px; height:36px; border-radius:8px; border:2px dashed #cbd5e1; align-items:center; justify-content:center; font-size:22px; font-weight:800; background:#f8fafc; padding:0 4px; }
+    .div-field-slot.active { border-color:var(--primary); border-style:solid; box-shadow:0 0 0 3px rgba(79,70,229,.15); animation:pulse-slot 1.2s infinite; }
+    .div-field-slot.filled { border-style:solid; border-color:#94a3b8; }
+    .div-field-slot.correct { border-color:var(--good); background:#ecfdf5; }
+    .div-field-slot.wrong { border-color:var(--bad); background:#fef2f2; }
+
+    /* Step guide below the board */
+    .step-guide { margin-top:14px; padding:12px; background:#f8fafc; border-radius:16px; border:1px solid #e5e7eb; }
+    .step-guide-title { font-size:13px; font-weight:800; color:var(--primary); text-transform:uppercase; margin-bottom:6px; }
+    .step-guide-text { font-size:16px; font-weight:700; color:var(--ink); }
+
+    .division-actions { display:grid; gap:10px; margin-top:14px; }
+    @media (min-width:760px) { .division-actions { grid-template-columns:1.2fr auto auto auto; align-items:end; } }
+    .division-help { margin-top:10px; color:var(--muted); font-weight:600; }
+    .division-process-ok { margin-top:12px; padding:12px; border-radius:16px; background:#ecfdf5; color:#065f46; font-weight:800; text-align:center; }
+    .division-process-bad { margin-top:12px; padding:12px; border-radius:16px; background:#fef2f2; color:#991b1b; font-weight:800; text-align:center; }
+
+    /* ── Innovamat-style operation (sumes, restes, multiplicacions) ── */
+    .innova-op { display:flex; flex-direction:column; align-items:flex-start; gap:6px; margin:16px auto 0; max-width:520px; }
+    .innova-row { display:flex; align-items:center; gap:12px; }
+    .innova-sign { width:32px; font-size:26px; font-weight:900; color:var(--primary); text-align:center; flex-shrink:0; }
+    .innova-box { min-width:72px; padding:8px 14px; border-radius:16px; border:3px solid #3b82f6; background:#eff6ff; font-size:28px; font-weight:900; color:#1e40af; text-align:center; }
+    .innova-box.result { border-color:#16a34a; background:#f0fdf4; color:#15803d; border-style:dashed; min-width:72px; }
+    .innova-box.result.correct { border-style:solid; background:#dcfce7; color:#166534; }
+    .innova-box.result.wrong { border-color:var(--bad); background:#fef2f2; color:var(--bad); border-style:solid; }
+    .innova-tally { display:flex; align-items:flex-end; gap:4px; flex-wrap:wrap; max-width:260px; }
+    .innova-tally-group { display:flex; align-items:flex-end; gap:2px; margin-right:4px; }
+    .innova-bar { display:inline-block; width:5px; background:#f59e0b; border-radius:3px; }
+    .innova-bar.tall  { height:32px; }  /* tens */
+    .innova-bar.short { height:14px; background:#f59e0b; width:4px; }  /* units — short horizontal */
+    .innova-cross { display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; color:#f59e0b; width:14px; height:14px; }
+    .innova-hundred { display:inline-block; width:14px; height:22px; background:#6366f1; border-radius:3px; margin-right:2px; }
+    .innova-line-wrap { padding-left:44px; width:100%; }
+    .innova-line { height:3px; background:#1f2937; border-radius:2px; width:100%; max-width:340px; }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="hero">
       <div class="hero-top">
-        <div class="hero-brand">
-          <div class="hero-mascot" aria-hidden="true">🦊</div>
-          <div>
-            <h1>MateKids</h1>
-            <p>Aprèn, juga i supera reptes matemàtics cada dia.</p>
-          </div>
-        </div>
-        <div class="mini-tabs" aria-hidden="true">
-          <div class="mini-tab">Aventura</div>
-          <div class="mini-tab">Joc</div>
-          <div class="mini-tab">Reptes</div>
-        </div>
+        <div class="hero-brand"><div class="hero-mascot">🦊</div><div><h1>MateKids</h1><p>Aprèn, juga i supera reptes matemàtics cada dia.</p></div></div>
+        <div class="mini-tabs"><div class="mini-tab">Aventura</div><div class="mini-tab">Joc</div><div class="mini-tab">Reptes</div></div>
       </div>
       <div class="stats">
         <div class="stat"><strong id="scoreHits">0</strong>Encerts</div>
         <div class="stat"><strong id="scoreMisses">0</strong>Errors</div>
         <div class="stat"><strong id="scoreStreak">0</strong>Ratxa</div>
       </div>
+      <div class="reward-strip">
+        <div class="reward-pill">⭐ <span id="scoreStars">0</span> estrelles</div>
+        <div class="reward-pill">🏅 <span id="scoreMedals">0</span> medalles</div>
+        <div class="reward-pill">🗺️ Etapa <span id="adventureStepText">1</span>/10</div>
+      </div>
     </div>
 
     <div class="section journey-grid">
-      <div class="journey-card">
-        <div class="journey-icon" aria-hidden="true">🎯</div>
-        <h3>Repte del moment</h3>
-        <p>Posa a prova el teu enginy i continua avançant pas a pas.</p>
+      <div class="journey-card"><div class="journey-icon">🎯</div><h3>Repte del moment</h3><p>Posa a prova el teu enginy i continua avançant pas a pas.</p></div>
+      <div class="journey-card"><div class="journey-icon">🏆</div><h3>Guanya estrelles</h3><p>Cada resposta bona t'acosta a noves fites i més confiança.</p></div>
+      <div class="journey-card"><div class="journey-icon">🚀</div><h3>Segueix millorant</h3><p>Practica una mica cada dia i veuràs com avances molt.</p></div>
+    </div>
+
+    <div class="section adventure-card">
+      <div class="adventure-top">
+        <div><h3 class="adventure-title">Camí de l'aventura</h3><p class="adventure-sub">Cada resposta bona fa avançar el personatge fins al tresor.</p></div>
+        <div class="adventure-badges"><div class="adventure-badge">📍 Punt <span id="adventureBadgeStep">1</span>/10</div><div class="adventure-badge">🏁 Meta final</div></div>
       </div>
-      <div class="journey-card">
-        <div class="journey-icon" aria-hidden="true">🏆</div>
-        <h3>Guanya estrelles</h3>
-        <p>Cada resposta bona t’acosta a noves fites i més confiança.</p>
-      </div>
-      <div class="journey-card">
-        <div class="journey-icon" aria-hidden="true">🚀</div>
-        <h3>Segueix millorant</h3>
-        <p>Practica una mica cada dia i veuràs com avances molt.</p>
-      </div>
+      <div class="adventure-canvas-wrap"><canvas id="adventureCanvas" class="adventure-canvas" width="900" height="210"></canvas></div>
     </div>
 
     <div class="section card">
       <div class="welcome-banner">
-        <div class="welcome-text">
-          <div class="welcome-kicker">Aprendre jugant</div>
-          <h2>Preparat per brillar amb els nombres?</h2>
-          <p id="motivationText">Cada pas compta. Tu pots aconseguir-ho!</p>
-        </div>
-        <div class="welcome-stars" aria-hidden="true">⭐ 🌈 ✨</div>
+        <div><div class="welcome-kicker">Aprendre jugant</div><h2>Preparat per brillar amb els nombres?</h2><p id="motivationText">Cada pas compta. Tu pots aconseguir-ho!</p></div>
+        <div class="welcome-stars">⭐ 🌈 ✨</div>
       </div>
       <div class="grid-4">
         <button class="mode-btn active" data-mode="sumes"><span class="mode-emoji">➕</span>Sumes</button>
@@ -317,33 +229,10 @@
 
     <div class="section card">
       <div class="toolbar">
-        <div>
-          <label for="level">Nivell</label>
-          <select id="level">
-            <option value="1">1 - Molt fàcil</option>
-            <option value="2">2 - Fàcil</option>
-            <option value="3" selected>3 - Mitjà</option>
-            <option value="4">4 - Avançat</option>
-          </select>
-        </div>
-        <div>
-          <label for="practiceType">Tipus</label>
-          <select id="practiceType">
-            <option value="resultat">Escriu el resultat</option>
-            <option value="opcions">Tria la resposta</option>
-          </select>
-        </div>
-        <div>
-          <label for="soundToggle">Ànims</label>
-          <select id="soundToggle">
-            <option value="on">Missatges activats</option>
-            <option value="off">Missatges discrets</option>
-          </select>
-        </div>
-        <div>
-          <label>&nbsp;</label>
-          <button class="primary" id="newExerciseBtn">Nou exercici</button>
-        </div>
+        <div><label for="level">Nivell</label><select id="level"><option value="1">1 - Molt fàcil</option><option value="2">2 - Fàcil</option><option value="3" selected>3 - Mitjà</option><option value="4">4 - Avançat</option></select></div>
+        <div><label for="practiceType">Tipus</label><select id="practiceType"><option value="resultat">Escriu el resultat</option><option value="opcions">Tria la resposta</option></select></div>
+        <div><label for="soundToggle">Ànims</label><select id="soundToggle"><option value="on">Missatges activats</option><option value="off">Missatges discrets</option></select></div>
+        <div><label>&nbsp;</label><button class="primary" id="newExerciseBtn">Nou exercici</button></div>
       </div>
 
       <div class="problem">
@@ -351,30 +240,50 @@
         <div class="big-problem" id="problemText">12 + 7 = ?</div>
         <div class="sub" id="problemHint">Pensa primer i després escriu la resposta.</div>
 
-        <div id="answerInputPanel">
-          <div class="answer-row">
-            <input class="answer" id="answerInput" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="?">
-            <button class="primary" id="checkBtn">Comprova</button>
+        <!-- Standard answer panel (sumes, restes, multiplicacions) -->
+        <div id="standardPanel">
+          <!-- Innovamat-style vertical format -->
+          <div id="verticalOp" class="innova-op hidden" aria-label="operació visual"></div>
+          <div id="answerInputPanel">
+            <div class="answer-row">
+              <input class="answer" id="answerInput" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="?">
+              <button class="primary" id="checkBtn">Comprova</button>
+            </div>
+            <div class="keys">
+              <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+              <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+              <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+              <button class="key">0</button><button class="key">⌫</button><button class="key">−</button>
+              <button class="key wide">Esborra</button>
+            </div>
           </div>
-          <div class="keys">
-            <button class="key">1</button>
-            <button class="key">2</button>
-            <button class="key">3</button>
-            <button class="key">4</button>
-            <button class="key">5</button>
-            <button class="key">6</button>
-            <button class="key">7</button>
-            <button class="key">8</button>
-            <button class="key">9</button>
-            <button class="key">0</button>
-            <button class="key" id="backspaceKey">⌫</button>
-            <button class="key" id="minusKey">−</button>
-            <button class="key wide" id="clearKey">Esborra</button>
+          <div id="answerOptionsPanel" class="hidden">
+            <div class="actions" id="optionButtons"></div>
           </div>
         </div>
 
-        <div id="answerOptionsPanel" class="hidden">
-          <div class="actions" id="optionButtons"></div>
+        <!-- Division interactive trainer -->
+        <div id="divisionTrainer" class="division-trainer hidden">
+          <div class="division-head">
+            <div><h3>Divisió pas a pas</h3><p>Omple cada casella seguint l'ordre. El punter t'indica on toca.</p></div>
+            <div class="pointer-chip" id="divisionPointerText">Ara toca: començar</div>
+          </div>
+
+          <div class="division-board" id="divisionBoard">
+            <!-- Rendered by JS in European/Spanish format -->
+          </div>
+
+          <div class="division-actions">
+            <div>
+              <label for="divisionInput">Nombre que vols col·locar</label>
+              <input id="divisionInput" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="Escriu el següent pas">
+            </div>
+            <button class="secondary" id="placeDivisionBtn">Col·loca</button>
+            <button class="ghost" id="undoDivisionBtn">Desfés</button>
+            <button class="primary" id="checkDivisionProcessBtn">Comprova</button>
+          </div>
+          <div class="division-help" id="divisionHelp"></div>
+          <div id="divisionValidationBox"></div>
         </div>
 
         <div class="feedback" id="feedback"></div>
@@ -382,22 +291,12 @@
     </div>
 
     <div class="section lesson-grid">
-      <div class="card">
-        <div class="mini-card">
-          <h3>Com es fa</h3>
-          <div id="lessonContent"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="mini-card">
-          <h3>Exemple pas a pas</h3>
-          <div id="exampleContent"></div>
-        </div>
-      </div>
+      <div class="card"><div class="mini-card"><h3>Com es fa</h3><div id="lessonContent"></div></div></div>
+      <div class="card"><div class="mini-card"><h3>Ajuda</h3><div id="exampleContent"></div></div></div>
     </div>
 
     <div class="section card" style="text-align:center;">
-      <button class="secondary" id="celebrateBtn" style="min-width:220px; min-height:54px; font-size:18px;">Vull una altra frase bonica</button>
+      <button class="secondary" id="celebrateBtn" style="min-width:220px;min-height:54px;font-size:18px;">Vull una altra frase bonica</button>
       <div class="cheer-box">
         <div class="cheer-title">Missatge del dia</div>
         <div class="cheer-text" id="dailyCheer">Aprendre és una aventura. Continua així!</div>
@@ -406,432 +305,738 @@
   </div>
 
   <script>
-    (function () {
-      var state = {
-        mode: 'sumes',
-        level: 3,
-        practiceType: 'resultat',
-        sound: 'on',
-        a: 0,
-        b: 0,
-        answer: 0,
-        remainder: 0,
-        hits: 0,
-        misses: 0,
-        streak: 0
-      };
+  (function () {
+    'use strict';
 
-      var el = {
-        modeButtons: document.querySelectorAll('.mode-btn'),
-        level: document.getElementById('level'),
-        practiceType: document.getElementById('practiceType'),
-        soundToggle: document.getElementById('soundToggle'),
-        newExerciseBtn: document.getElementById('newExerciseBtn'),
-        opBadge: document.getElementById('opBadge'),
-        problemText: document.getElementById('problemText'),
-        problemHint: document.getElementById('problemHint'),
-        answerInputPanel: document.getElementById('answerInputPanel'),
-        answerOptionsPanel: document.getElementById('answerOptionsPanel'),
-        optionButtons: document.getElementById('optionButtons'),
-        answerInput: document.getElementById('answerInput'),
-        checkBtn: document.getElementById('checkBtn'),
-        feedback: document.getElementById('feedback'),
-        lessonContent: document.getElementById('lessonContent'),
-        exampleContent: document.getElementById('exampleContent'),
-        scoreHits: document.getElementById('scoreHits'),
-        scoreMisses: document.getElementById('scoreMisses'),
-        scoreStreak: document.getElementById('scoreStreak'),
-        motivationText: document.getElementById('motivationText'),
-        dailyCheer: document.getElementById('dailyCheer'),
-        celebrateBtn: document.getElementById('celebrateBtn')
-      };
+    /* ── State ── */
+    var state = {
+      mode: 'sumes', level: 3, practiceType: 'resultat', sound: 'on',
+      a: 0, b: 0, answer: 0, remainder: 0,
+      hits: 0, misses: 0, streak: 0, stars: 0, medals: 0, adventureStep: 0,
+      divisionFlow: [], divisionFieldOrder: [], divisionEntries: {},
+      divisionPointer: 0, divisionChecked: false
+    };
 
-      function saveProgress() {
-        try {
-          localStorage.setItem('matekids-state', JSON.stringify({
-            hits: state.hits,
-            misses: state.misses,
-            streak: state.streak,
-            mode: state.mode,
-            level: state.level,
-            practiceType: state.practiceType,
-            sound: state.sound
-          }));
-        } catch (e) {}
+    /* ── DOM refs ── */
+    var el = {
+      modeButtons: document.querySelectorAll('.mode-btn'),
+      level: document.getElementById('level'),
+      practiceType: document.getElementById('practiceType'),
+      soundToggle: document.getElementById('soundToggle'),
+      newExerciseBtn: document.getElementById('newExerciseBtn'),
+      opBadge: document.getElementById('opBadge'),
+      problemText: document.getElementById('problemText'),
+      problemHint: document.getElementById('problemHint'),
+      standardPanel: document.getElementById('standardPanel'),
+      answerInputPanel: document.getElementById('answerInputPanel'),
+      answerOptionsPanel: document.getElementById('answerOptionsPanel'),
+      optionButtons: document.getElementById('optionButtons'),
+      answerInput: document.getElementById('answerInput'),
+      checkBtn: document.getElementById('checkBtn'),
+      verticalOp: document.getElementById('verticalOp'),
+      feedback: document.getElementById('feedback'),
+      lessonContent: document.getElementById('lessonContent'),
+      exampleContent: document.getElementById('exampleContent'),
+      scoreHits: document.getElementById('scoreHits'),
+      scoreMisses: document.getElementById('scoreMisses'),
+      scoreStreak: document.getElementById('scoreStreak'),
+      scoreStars: document.getElementById('scoreStars'),
+      scoreMedals: document.getElementById('scoreMedals'),
+      adventureStepText: document.getElementById('adventureStepText'),
+      adventureBadgeStep: document.getElementById('adventureBadgeStep'),
+      adventureCanvas: document.getElementById('adventureCanvas'),
+      motivationText: document.getElementById('motivationText'),
+      dailyCheer: document.getElementById('dailyCheer'),
+      celebrateBtn: document.getElementById('celebrateBtn'),
+      divisionTrainer: document.getElementById('divisionTrainer'),
+      divisionBoard: document.getElementById('divisionBoard'),
+      divisionPointerText: document.getElementById('divisionPointerText'),
+      divisionInput: document.getElementById('divisionInput'),
+      placeDivisionBtn: document.getElementById('placeDivisionBtn'),
+      undoDivisionBtn: document.getElementById('undoDivisionBtn'),
+      checkDivisionProcessBtn: document.getElementById('checkDivisionProcessBtn'),
+      divisionHelp: document.getElementById('divisionHelp'),
+      divisionValidationBox: document.getElementById('divisionValidationBox')
+    };
+
+    /* ── Persistence ── */
+    function save() {
+      try {
+        localStorage.setItem('matekids-state', JSON.stringify({
+          hits: state.hits, misses: state.misses, streak: state.streak,
+          mode: state.mode, level: state.level, practiceType: state.practiceType,
+          sound: state.sound, stars: state.stars, medals: state.medals,
+          adventureStep: state.adventureStep
+        }));
+      } catch (e) { /* quota exceeded */ }
+    }
+
+    function load() {
+      try {
+        var raw = localStorage.getItem('matekids-state');
+        if (!raw) return;
+        var d = JSON.parse(raw);
+        state.hits = d.hits || 0; state.misses = d.misses || 0; state.streak = d.streak || 0;
+        state.mode = d.mode || 'sumes'; state.level = d.level || 3;
+        state.practiceType = d.practiceType || 'resultat'; state.sound = d.sound || 'on';
+        state.stars = d.stars || 0; state.medals = d.medals || 0;
+        state.adventureStep = d.adventureStep || 0;
+      } catch (e) { /* corrupted */ }
+    }
+
+    /* ── Helpers ── */
+    function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    function shuffle(arr) {
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+      }
+      return arr;
+    }
+
+    function rangeByLevel(level, mode) {
+      if (mode === 'sumes' || mode === 'restes') {
+        if (level === 1) return [0, 10];
+        if (level === 2) return [0, 30];
+        if (level === 3) return [10, 99];
+        return [50, 999];
+      }
+      if (mode === 'multiplicacions') {
+        if (level === 1) return [0, 5];
+        if (level === 2) return [2, 10];
+        if (level === 3) return [3, 12];
+        return [6, 15];
+      }
+      /* divisions: [divisorMin, divisorMax, quotientMin, quotientMax] */
+      if (level === 1) return [2, 5, 2, 5];
+      if (level === 2) return [2, 9, 2, 9];
+      if (level === 3) return [3, 12, 3, 12];
+      return [11, 30, 10, 99];  /* 2-digit divisor, dividend up to 4 digits */
+    }
+
+    function modeLabel(mode) {
+      if (mode === 'sumes') return 'Sumes';
+      if (mode === 'restes') return 'Restes';
+      if (mode === 'multiplicacions') return 'Multiplicacions';
+      return 'Divisions';
+    }
+
+    function motivationalSet() {
+      return [
+        'Cada intent et fa més fort amb les mates.',
+        'Ho estàs fent molt bé. Continua!',
+        'Els grans aprenentatges comencen pas a pas.',
+        'Tu pots amb aquest repte!',
+        'Practicar una mica cada dia és màgic.',
+        'Els errors també ens ajuden a aprendre.',
+        'Brilles cada vegada que ho intentes.',
+        'Endavant! Estàs millorant molt.',
+        'Respira, pensa i confia en tu.',
+        'Ets capaç de coses increïbles.'
+      ];
+    }
+
+    function refreshMotivation() {
+      var m = motivationalSet();
+      el.motivationText.textContent = m[rand(0, m.length - 1)];
+      el.dailyCheer.textContent = m[rand(0, m.length - 1)];
+    }
+
+    function correctMessage() {
+      var arr = ['Molt bé!', 'Fantàstic!', 'Genial!', 'Ho has fet súper bé!', 'Bravíssim!', 'Ets increïble!'];
+      return state.sound === 'on' ? arr[rand(0, arr.length - 1)] : 'Correcte';
+    }
+
+    /* ── Stats & Adventure ── */
+    function renderStats() {
+      el.scoreHits.textContent = state.hits;
+      el.scoreMisses.textContent = state.misses;
+      el.scoreStreak.textContent = state.streak;
+      el.scoreStars.textContent = state.stars;
+      el.scoreMedals.textContent = state.medals;
+      el.adventureStepText.textContent = String((state.adventureStep % 10) + 1);
+      el.adventureBadgeStep.textContent = String((state.adventureStep % 10) + 1);
+      drawAdventurePath();
+    }
+
+    function drawAdventurePath() {
+      var canvas = el.adventureCanvas;
+      if (!canvas || !canvas.getContext) return;
+      var ctx = canvas.getContext('2d');
+      var points = [
+        {x:70,y:150},{x:150,y:120},{x:230,y:138},{x:320,y:96},{x:410,y:112},
+        {x:500,y:74},{x:590,y:100},{x:680,y:68},{x:770,y:92},{x:845,y:54}
+      ];
+      var p = state.adventureStep % 10;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#dbeafe'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#bbf7d0'; ctx.fillRect(0, 145, canvas.width, 65);
+
+      /* trail */
+      ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
+      for (var i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+      ctx.lineWidth = 20; ctx.lineCap = 'round'; ctx.strokeStyle = '#d6b37a'; ctx.stroke();
+
+      /* progress */
+      ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
+      for (var j = 1; j <= p && j < points.length; j++) ctx.lineTo(points[j].x, points[j].y);
+      ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.strokeStyle = '#6366f1'; ctx.stroke();
+
+      /* nodes */
+      for (var k = 0; k < points.length; k++) {
+        ctx.beginPath(); ctx.arc(points[k].x, points[k].y, 12, 0, Math.PI * 2);
+        ctx.fillStyle = k <= p ? '#8b5cf6' : '#ffffff'; ctx.fill();
+        ctx.lineWidth = 4; ctx.strokeStyle = '#4338ca'; ctx.stroke();
+        ctx.fillStyle = k <= p ? '#ffffff' : '#4338ca';
+        ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(String(k + 1), points[k].x, points[k].y + 1);
       }
 
-      function loadProgress() {
-        try {
-          var raw = localStorage.getItem('matekids-state');
-          if (!raw) { return; }
-          var data = JSON.parse(raw);
-          if (data) {
-            state.hits = data.hits || 0;
-            state.misses = data.misses || 0;
-            state.streak = data.streak || 0;
-            state.mode = data.mode || 'sumes';
-            state.level = data.level || 3;
-            state.practiceType = data.practiceType || 'resultat';
-            state.sound = data.sound || 'on';
-          }
-        } catch (e) {}
-      }
+      /* start flag */
+      ctx.fillStyle = '#16a34a'; ctx.fillRect(26, 118, 20, 42);
+      ctx.beginPath(); ctx.moveTo(46, 120); ctx.lineTo(76, 132); ctx.lineTo(46, 144); ctx.closePath();
+      ctx.fillStyle = '#ef4444'; ctx.fill();
 
-      function rand(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
+      /* treasure */
+      ctx.fillStyle = '#92400e'; ctx.fillRect(820, 18, 42, 26);
+      ctx.strokeStyle = '#78350f'; ctx.lineWidth = 3; ctx.strokeRect(820, 18, 42, 26);
+      ctx.beginPath(); ctx.moveTo(820, 31); ctx.lineTo(862, 31); ctx.stroke();
+      ctx.fillStyle = '#fbbf24'; ctx.fillRect(835, 23, 10, 10);
 
-      function shuffle(arr) {
-        var i, j, tmp;
-        for (i = arr.length - 1; i > 0; i--) {
-          j = Math.floor(Math.random() * (i + 1));
-          tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+      /* hero */
+      var hero = points[p];
+      ctx.beginPath(); ctx.arc(hero.x, hero.y - 24, 11, 0, Math.PI * 2);
+      ctx.fillStyle = '#f59e0b'; ctx.fill();
+      ctx.fillRect(hero.x - 7, hero.y - 13, 14, 20);
+      ctx.fillStyle = '#1f2937';
+      ctx.fillRect(hero.x - 12, hero.y + 6, 8, 18);
+      ctx.fillRect(hero.x + 4, hero.y + 6, 8, 18);
+      ctx.fillRect(hero.x - 16, hero.y - 8, 8, 6);
+      ctx.fillRect(hero.x + 8, hero.y - 8, 8, 6);
+    }
+
+    /* ══════════════════════════════════════════════
+       DIVISION — European/Spanish educational format
+       Layout:
+         dividend │ divisor
+                  │ ───────
+                  │ quotient
+         -product │
+         ──────── │
+         remainder│
+         ...      │
+       ══════════════════════════════════════════════ */
+
+    function buildDivisionFlow(dividend, divisor) {
+      var digits = String(dividend).split('');
+      var current = '';
+      var steps = [];
+      var quotient = '';
+
+      for (var i = 0; i < digits.length; i++) {
+        current += digits[i];
+        var num = parseInt(current, 10);
+
+        /* Skip leading digits that are smaller than divisor (they get grouped with next) */
+        if (num < divisor && i < digits.length - 1 && steps.length === 0) {
+          continue;
         }
-        return arr;
+
+        var q = Math.floor(num / divisor);
+        var product = q * divisor;
+        var remainder = num - product;
+        quotient += String(q);
+
+        var nextPartial = null;
+        if (i < digits.length - 1) {
+          nextPartial = parseInt(String(remainder) + digits[i + 1], 10);
+        }
+
+        steps.push({
+          index: steps.length,
+          current: num,
+          q: q,
+          product: product,
+          remainder: remainder,
+          nextDigit: i < digits.length - 1 ? digits[i + 1] : null,
+          nextPartial: nextPartial
+        });
+        current = String(remainder);
       }
 
-      function rangeByLevel(level, mode) {
-        if (mode === 'sumes' || mode === 'restes') {
-          if (level === 1) { return [0, 10]; }
-          if (level === 2) { return [0, 30]; }
-          if (level === 3) { return [10, 99]; }
-          return [50, 999];
+      if (!quotient) quotient = '0';
+      return { quotient: quotient, remainder: parseInt(current, 10) || 0, steps: steps };
+    }
+
+    function buildDivisionFieldOrder() {
+      var list = [];
+      for (var i = 0; i < state.divisionFlow.length; i++) {
+        list.push({ step: i, type: 'q' });
+        list.push({ step: i, type: 'product' });
+        list.push({ step: i, type: 'remainder' });
+        if (state.divisionFlow[i].nextDigit !== null) {
+          list.push({ step: i, type: 'bringdown' });
         }
-        if (mode === 'multiplicacions') {
-          if (level === 1) { return [0, 5]; }
-          if (level === 2) { return [2, 10]; }
-          if (level === 3) { return [3, 12]; }
-          return [6, 15];
+      }
+      state.divisionFieldOrder = list;
+    }
+
+    function currentField() {
+      return state.divisionFieldOrder[state.divisionPointer] || null;
+    }
+    function fKey(step, type) { return step + '_' + type; }
+    function entryValue(step, type) { return state.divisionEntries[fKey(step, type)] || ''; }
+    function correctValue(step, type) {
+      var s = state.divisionFlow[step];
+      if (type === 'q') return String(s.q);
+      if (type === 'product') return String(s.product);
+      if (type === 'remainder') return String(s.remainder);
+      if (type === 'bringdown') return String(s.nextPartial);
+      return '';
+    }
+
+    function slotClass(step, type, base) {
+      var cls = base || 'div-field-slot';
+      var c = currentField();
+      var val = entryValue(step, type);
+      if (val) cls += ' filled';
+      if (c && c.step === step && c.type === type && !state.divisionChecked) cls += ' active';
+      if (state.divisionChecked) {
+        cls += val === correctValue(step, type) ? ' correct' : ' wrong';
+      }
+      return cls;
+    }
+
+    /* Render the division board in European/Spanish visual format */
+    function renderDivisionTrainer() {
+      var c = currentField();
+      var flow = state.divisionFlow;
+      var html = '';
+
+      /* ── Build the board ── */
+      html += '<div class="division-layout">';
+
+      /* LEFT side: dividend + work */
+      html += '<div class="division-left">';
+      html += '<div class="div-dividend">' + String(state.a) + '</div>';
+
+      for (var s = 0; s < flow.length; s++) {
+        var st = flow[s];
+        /* Product line (subtracted) */
+        html += '<div class="div-work-line subtract">';
+        html += '<span style="margin-right:4px;font-size:18px;color:#94a3b8">−</span>';
+        html += '<span class="' + slotClass(s, 'product') + '">' + entryValue(s, 'product') + '</span>';
+        html += '</div>';
+
+        /* Separator */
+        var width = Math.max(String(st.current).length, String(st.product).length) * 22 + 20;
+        html += '<div class="div-separator-line" style="width:' + width + 'px"></div>';
+
+        /* Remainder line */
+        html += '<div class="div-work-line">';
+        html += '<span class="' + slotClass(s, 'remainder') + '">' + entryValue(s, 'remainder') + '</span>';
+
+        /* Bringdown (next digit appended to remainder) */
+        if (st.nextDigit !== null) {
+          html += '<span class="' + slotClass(s, 'bringdown') + '" style="margin-left:2px">' + entryValue(s, 'bringdown') + '</span>';
         }
-        if (level === 1) { return [2, 5]; }
-        if (level === 2) { return [2, 9]; }
-        if (level === 3) { return [3, 12]; }
-        return [4, 15];
+        html += '</div>';
+      }
+      html += '</div>'; /* end left */
+
+      /* SEPARATOR bar */
+      html += '<div class="division-separator"></div>';
+
+      /* RIGHT side: divisor + quotient */
+      html += '<div class="division-right">';
+      html += '<div class="div-divisor" style="font-size:28px;font-weight:900">' + state.b + '</div>';
+      html += '<div class="div-quotient-row">';
+      for (var q = 0; q < flow.length; q++) {
+        html += '<div class="' + slotClass(q, 'q', 'quot-slot') + '">' + entryValue(q, 'q') + '</div>';
+      }
+      html += '</div>';
+      html += '</div>'; /* end right */
+
+      html += '</div>'; /* end layout */
+
+      el.divisionBoard.innerHTML = html;
+
+      /* ── Pointer text ── */
+      if (c) {
+        var labels = {
+          q: 'el quocient (quantes vegades hi cap ' + state.b + ')',
+          product: 'la multiplicació (' + state.b + ' × quocient)',
+          remainder: 'la resta',
+          bringdown: 'baixar la xifra ' + (flow[c.step] ? flow[c.step].nextDigit : '')
+        };
+        el.divisionPointerText.textContent = 'Ara toca: ' + labels[c.type];
+        el.divisionHelp.textContent = 'Pas ' + (c.step + 1) + ': escriu ' + labels[c.type] + '.';
+      } else {
+        el.divisionPointerText.textContent = 'Tots els passos omplerts!';
+        el.divisionHelp.textContent = 'Prem «Comprova» per validar tot el procés.';
+      }
+    }
+
+    function resetDivisionTrainer() {
+      state.divisionChecked = false;
+      state.divisionEntries = {};
+      state.divisionPointer = 0;
+      state.divisionFlow = buildDivisionFlow(state.a, state.b).steps;
+      buildDivisionFieldOrder();
+      el.divisionValidationBox.innerHTML = '';
+      el.divisionInput.value = '';
+      renderDivisionTrainer();
+    }
+
+    function placeDivisionValue() {
+      var c = currentField();
+      if (!c) return;
+      var v = String(el.divisionInput.value).trim();
+      if (v === '') return;
+      state.divisionEntries[fKey(c.step, c.type)] = v;
+      state.divisionPointer += 1;
+      el.divisionInput.value = '';
+      renderDivisionTrainer();
+      el.divisionInput.focus();
+    }
+
+    function undoDivisionValue() {
+      if (state.divisionPointer <= 0) return;
+      state.divisionPointer -= 1;
+      var c = currentField();
+      if (c) delete state.divisionEntries[fKey(c.step, c.type)];
+      state.divisionChecked = false;
+      el.divisionValidationBox.innerHTML = '';
+      renderDivisionTrainer();
+      el.divisionInput.focus();
+    }
+
+    function validateDivisionProcess() {
+      state.divisionChecked = true;
+      var ok = true;
+      for (var i = 0; i < state.divisionFieldOrder.length; i++) {
+        var f = state.divisionFieldOrder[i];
+        if (entryValue(f.step, f.type) !== correctValue(f.step, f.type)) { ok = false; break; }
+      }
+      renderDivisionTrainer();
+
+      if (ok) {
+        var flow = buildDivisionFlow(state.a, state.b);
+        var msg = correctMessage() + ' Resultat: quocient ' + flow.quotient;
+        if (flow.remainder) msg += ' i residu ' + flow.remainder;
+        msg += '.';
+        el.divisionValidationBox.innerHTML = '<div class="division-process-ok">' + msg + '</div>';
+        state.hits += 1; state.streak += 1; state.stars += 1; state.adventureStep += 1;
+        if (state.adventureStep > 0 && state.adventureStep % 10 === 0) {
+          state.medals += 1;
+          el.dailyCheer.textContent = '🏅 Has arribat al tresor i has guanyat una medalla!';
+        }
+        renderStats(); save();
+        setTimeout(generateProblem, 1400);
+      } else {
+        state.misses += 1; state.streak = 0;
+        renderStats(); save();
+        el.divisionValidationBox.innerHTML = '<div class="division-process-bad">Revisa els quadres vermells i torna a provar.</div>';
+      }
+    }
+
+    /* ── Innovamat tally builder ── */
+    function tallyHTML(n) {
+      /* Shows hundreds (purple blocks), tens (tall yellow bars), units (short yellow bars) */
+      if (n <= 0) return '';
+      var h = Math.floor(n / 100);
+      var t = Math.floor((n % 100) / 10);
+      var u = n % 10;
+      var html = '<div class="innova-tally">';
+
+      /* Hundreds: purple vertical blocks, capped at 9 */
+      if (h > 0) {
+        var hShow = Math.min(h, 9);
+        html += '<div class="innova-tally-group">';
+        for (var i = 0; i < hShow; i++) html += '<span class="innova-hundred" title="100"></span>';
+        html += '</div>';
       }
 
-      function generateProblem() {
-        refreshMotivation();
-        var r = rangeByLevel(state.level, state.mode);
-        var a, b, answer, remainder, text, hint;
-        remainder = 0;
+      /* Tens: tall yellow bars, capped at 9 */
+      if (t > 0) {
+        html += '<div class="innova-tally-group">';
+        for (var j = 0; j < t; j++) html += '<span class="innova-bar tall" title="10"></span>';
+        html += '</div>';
+      }
 
-        if (state.mode === 'sumes') {
-          a = rand(r[0], r[1]);
-          b = rand(r[0], r[1]);
-          answer = a + b;
-          text = a + ' + ' + b + ' = ?';
-          hint = 'Pots comptar, agrupar o fer-ho mentalment.';
-        } else if (state.mode === 'restes') {
-          a = rand(r[0], r[1]);
-          b = rand(r[0], r[1]);
-          if (b > a) { var t = a; a = b; b = t; }
-          answer = a - b;
-          text = a + ' − ' + b + ' = ?';
-          hint = 'Mira quants en falten per arribar.';
-        } else if (state.mode === 'multiplicacions') {
-          a = rand(r[0], r[1]);
-          b = rand(r[0], r[1]);
-          answer = a * b;
-          text = a + ' × ' + b + ' = ?';
-          hint = 'Recorda: multiplicar és sumar grups iguals.';
-        } else {
-          b = rand(r[0], r[1]);
-          var q = rand(r[0], r[1]);
+      /* Units: short yellow bars, capped at 9 */
+      if (u > 0) {
+        html += '<div class="innova-tally-group">';
+        for (var k = 0; k < u; k++) html += '<span class="innova-cross" title="1">×</span>';
+        html += '</div>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    /* ── Innovamat-style operation display ── */
+    function renderVerticalOp(answerState) {
+      /* answerState: 'pending' | 'correct' | 'wrong' */
+      var signs = { sumes: '+', restes: '−', multiplicacions: '×' };
+      var sign = signs[state.mode] || '+';
+
+      var typed = el.answerInput.value;
+      var resultText = answerState === 'correct' ? String(state.answer)
+                     : answerState === 'wrong'   ? (typed || '?')
+                     : (typed || '?');
+      var resultClass = 'innova-box result' +
+        (answerState === 'correct' ? ' correct' : answerState === 'wrong' ? ' wrong' : '');
+
+      /* Only show tallies for reasonably-sized numbers (up to 999) */
+      var showTally = state.a <= 999 && state.b <= 999;
+
+      var html = '';
+      /* Row A */
+      html += '<div class="innova-row">';
+      html += '<div class="innova-sign"></div>';
+      html += '<div class="innova-box">' + state.a + '</div>';
+      if (showTally) html += tallyHTML(state.a);
+      html += '</div>';
+
+      /* Row B with sign */
+      html += '<div class="innova-row">';
+      html += '<div class="innova-sign">' + sign + '</div>';
+      html += '<div class="innova-box">' + state.b + '</div>';
+      if (showTally) html += tallyHTML(state.b);
+      html += '</div>';
+
+      /* Separator line */
+      html += '<div class="innova-line-wrap"><div class="innova-line"></div></div>';
+
+      /* Result row */
+      html += '<div class="innova-row">';
+      html += '<div class="innova-sign"></div>';
+      html += '<div class="' + resultClass + '">' + resultText + '</div>';
+      if (answerState === 'correct' && showTally) html += tallyHTML(state.answer);
+      html += '</div>';
+
+      el.verticalOp.innerHTML = html;
+      el.verticalOp.className = 'innova-op';
+    }
+
+    /* ── Answer mode switching ── */
+    function renderAnswerMode() {
+      el.optionButtons.innerHTML = '';
+      if (state.mode === 'divisions') {
+        el.standardPanel.className = 'hidden';
+        el.divisionTrainer.className = 'division-trainer';
+        el.verticalOp.className = 'vertical-op hidden';
+        resetDivisionTrainer();
+        return;
+      }
+      el.divisionTrainer.className = 'division-trainer hidden';
+      el.standardPanel.className = '';
+      /* Hide inline problem text — vertical op replaces it */
+      el.problemText.className = 'big-problem hidden';
+      renderVerticalOp('pending');
+      if (state.practiceType === 'resultat') {
+        el.answerInputPanel.className = '';
+        el.answerOptionsPanel.className = 'hidden';
+        return;
+      }
+      el.answerInputPanel.className = 'hidden';
+      el.answerOptionsPanel.className = '';
+      var correct = state.answer;
+      var opts = [correct];
+      while (opts.length < 4) {
+        var delta = rand(1, 10 + state.level * 5);
+        var sign = Math.random() > 0.5 ? 1 : -1;
+        var candidate = correct + delta * sign;
+        if (state.mode !== 'restes' && candidate < 0) candidate = Math.abs(candidate);
+        if (opts.indexOf(candidate) === -1) opts.push(candidate);
+      }
+      shuffle(opts);
+      for (var i = 0; i < opts.length; i++) {
+        (function (value) {
+          var btn = document.createElement('button');
+          btn.className = 'secondary';
+          btn.style.cssText = 'min-width:110px;min-height:54px';
+          btn.textContent = String(value);
+          btn.onclick = function () { checkAnswer(value); };
+          el.optionButtons.appendChild(btn);
+        })(opts[i]);
+      }
+    }
+
+    /* ── Problem generation ── */
+    function generateProblem() {
+      refreshMotivation();
+      var r = rangeByLevel(state.level, state.mode);
+      var a, b, answer, remainder = 0, text, hint;
+
+      if (state.mode === 'sumes') {
+        a = rand(r[0], r[1]); b = rand(r[0], r[1]);
+        answer = a + b;
+        text = a + ' + ' + b + ' = ?';
+        hint = 'Pots comptar, agrupar o fer-ho mentalment.';
+      } else if (state.mode === 'restes') {
+        a = rand(r[0], r[1]); b = rand(r[0], r[1]);
+        if (b > a) { var t = a; a = b; b = t; }
+        answer = a - b;
+        text = a + ' − ' + b + ' = ?';
+        hint = 'Mira quants en falten per arribar.';
+      } else if (state.mode === 'multiplicacions') {
+        a = rand(r[0], r[1]); b = rand(r[0], r[1]);
+        answer = a * b;
+        text = a + ' × ' + b + ' = ?';
+        hint = 'Recorda: multiplicar és sumar grups iguals.';
+      } else {
+        /* Division — generate dividend = divisor*quotient + remainder
+           r = [divisorMin, divisorMax, quotientMin, quotientMax] */
+        b = rand(r[0], r[1]);
+        if (b < 2) b = 2;
+        var q, attempts = 0;
+        do {
+          q = rand(r[2], r[3]);
           remainder = state.level === 1 ? 0 : rand(0, b - 1);
           a = b * q + remainder;
-          answer = q;
-          text = a + ' ÷ ' + b + ' = ?';
-          hint = remainder ? 'Quocient: ' + a + ' ÷ ' + b + '. També hi ha residu.' : 'Troba quantes vegades hi cap.';
+          attempts++;
+        } while ((a < 10 || q < 2) && attempts < 50);
+        /* Safety fallback */
+        if (a < 10 || q < 2) { b = 3; q = 12; remainder = 0; a = 36; }
+        answer = q;
+        text = a + ' ÷ ' + b;
+        hint = 'Fes la divisió pas a pas i omple cada casella.';
+      }
+
+      state.a = a; state.b = b; state.answer = answer; state.remainder = remainder;
+      el.opBadge.textContent = modeLabel(state.mode);
+      /* Divisions show inline text; others use vertical format */
+      el.problemText.className = state.mode === 'divisions' ? 'big-problem' : 'big-problem hidden';
+      el.problemText.textContent = text;
+      el.problemHint.textContent = hint;
+      el.answerInput.value = '';
+      el.feedback.className = 'feedback'; el.feedback.textContent = '';
+      renderLesson();
+      renderAnswerMode();
+      setTimeout(function () {
+        try { (state.mode === 'divisions' ? el.divisionInput : el.answerInput).focus(); } catch (e) {}
+      }, 50);
+    }
+
+    /* ── Check standard answer ── */
+    function checkAnswer(value) {
+      var user = typeof value === 'number' ? value : parseInt(el.answerInput.value, 10);
+      if (isNaN(user)) {
+        el.feedback.className = 'feedback bad';
+        el.feedback.textContent = 'Escriu un número.';
+        return;
+      }
+      if (user === state.answer) {
+        state.hits += 1; state.streak += 1; state.stars += 1; state.adventureStep += 1;
+        if (state.adventureStep > 0 && state.adventureStep % 10 === 0) {
+          state.medals += 1;
+          el.dailyCheer.textContent = '🏅 Has arribat al tresor i has guanyat una medalla!';
         }
-
-        state.a = a;
-        state.b = b;
-        state.answer = answer;
-        state.remainder = remainder;
-
-        el.opBadge.innerHTML = modeLabel(state.mode);
-        el.problemText.innerHTML = text;
-        el.problemHint.innerHTML = hint;
-        el.answerInput.value = '';
-        el.feedback.className = 'feedback';
-        el.feedback.innerHTML = '';
-        renderLesson();
-        renderAnswerMode();
-        setTimeout(function () { try { el.answerInput.focus(); } catch (e) {} }, 50);
+        if (state.mode !== 'divisions') renderVerticalOp('correct');
+        el.feedback.className = 'feedback good';
+        el.feedback.textContent = correctMessage();
+        renderStats(); save();
+        setTimeout(generateProblem, 900);
+      } else {
+        state.misses += 1; state.streak = 0;
+        if (state.mode !== 'divisions') renderVerticalOp('wrong');
+        el.feedback.className = 'feedback bad';
+        el.feedback.textContent = 'No passa res. Ho tornem a provar.';
+        renderStats(); save();
       }
+    }
 
-      function modeLabel(mode) {
-        if (mode === 'sumes') { return 'Sumes'; }
-        if (mode === 'restes') { return 'Restes'; }
-        if (mode === 'multiplicacions') { return 'Multiplicacions'; }
-        return 'Divisions';
+    /* ── Lesson cards ── */
+    function renderLesson() {
+      var html = '', ex = '';
+      if (state.mode === 'sumes') {
+        html = '<ol class="steps"><li>Ajunta dues quantitats.</li><li>Pots comptar de mica en mica o fer salts.</li><li>També pots separar desenes i unitats.</li></ol>';
+        ex = '<div class="step-chip">Exemple</div><p>Comença pel número gran i afegeix l\'altre.</p>';
+      } else if (state.mode === 'restes') {
+        html = '<ol class="steps"><li>Treure és restar.</li><li>Pensa quant queda després de treure.</li><li>Pots comprovar sumant el resultat amb el número petit.</li></ol>';
+        ex = '<div class="step-chip">Comprovació</div><p>Resultat + número petit = número gran.</p>';
+      } else if (state.mode === 'multiplicacions') {
+        html = '<ol class="steps"><li>Multiplicar és fer grups iguals.</li><li>Primer pensa en la taula.</li><li>Després imagina grups iguals.</li></ol>';
+        ex = '<div class="step-chip">Consell</div><p>Pensa-ho com una suma repetida.</p>';
+      } else {
+        html = '<ol class="steps"><li>Mira el primer tros del dividend que sigui ≥ divisor.</li><li>Escriu quantes vegades hi cap (quocient).</li><li>Escriu la multiplicació (divisor × quocient).</li><li>Resta per trobar el que sobra.</li><li>Baixa la xifra següent i repeteix.</li></ol>';
+        ex = '<div class="step-chip">Format europeu</div><p>El dividend va a l\'esquerra, el divisor a la dreta. El quocient s\'escriu sota el divisor.</p>';
       }
+      el.lessonContent.innerHTML = html;
+      el.exampleContent.innerHTML = ex;
+    }
 
-      function renderStats() {
-        el.scoreHits.innerHTML = state.hits;
-        el.scoreMisses.innerHTML = state.misses;
-        el.scoreStreak.innerHTML = state.streak;
+    /* ── Mode switching ── */
+    function setMode(mode) {
+      state.mode = mode;
+      for (var i = 0; i < el.modeButtons.length; i++) {
+        var btn = el.modeButtons[i];
+        btn.className = btn.getAttribute('data-mode') === mode ? 'mode-btn active' : 'mode-btn';
       }
+      save();
+      generateProblem();
+    }
 
-      function setMode(mode) {
-        state.mode = mode;
-        for (var i = 0; i < el.modeButtons.length; i++) {
-          if (el.modeButtons[i].getAttribute('data-mode') === mode) {
-            el.modeButtons[i].className = 'mode-btn active';
-          } else {
-            el.modeButtons[i].className = 'mode-btn';
+    /* ── Event binding ── */
+    function bindEvents() {
+      for (var i = 0; i < el.modeButtons.length; i++) {
+        el.modeButtons[i].onclick = function () { setMode(this.getAttribute('data-mode')); };
+      }
+      el.level.onchange = function () { state.level = parseInt(this.value, 10); save(); generateProblem(); };
+      el.practiceType.onchange = function () { state.practiceType = this.value; save(); renderAnswerMode(); };
+      el.soundToggle.onchange = function () { state.sound = this.value; save(); };
+      el.newExerciseBtn.onclick = generateProblem;
+      el.checkBtn.onclick = function () { checkAnswer(); };
+      el.placeDivisionBtn.onclick = placeDivisionValue;
+      el.undoDivisionBtn.onclick = undoDivisionValue;
+      el.checkDivisionProcessBtn.onclick = validateDivisionProcess;
+      el.divisionInput.onkeydown = function (e) { if ((e || window.event).keyCode === 13) placeDivisionValue(); };
+      el.answerInput.onkeydown = function (e) { if ((e || window.event).keyCode === 13) checkAnswer(); };
+      el.answerInput.oninput = function () {
+        if (state.mode !== 'divisions') renderVerticalOp('pending');
+      };
+      el.celebrateBtn.onclick = function () { refreshMotivation(); };
+
+      var keys = document.querySelectorAll('.key');
+      for (var k = 0; k < keys.length; k++) {
+        keys[k].onclick = function () {
+          var text = this.textContent;
+          var target = state.mode === 'divisions' ? el.divisionInput : el.answerInput;
+          if (text === 'Esborra') { target.value = ''; renderVerticalOp('pending'); return; }
+          if (text === '⌫') { target.value = target.value.slice(0, -1); if (state.mode !== 'divisions') renderVerticalOp('pending'); return; }
+          if (text === '−') {
+            target.value = target.value.indexOf('-') === 0 ? target.value.slice(1) : '-' + target.value;
+            if (state.mode !== 'divisions') renderVerticalOp('pending');
+            return;
           }
-        }
-        saveProgress();
-        generateProblem();
-      }
-
-      function renderAnswerMode() {
-        el.optionButtons.innerHTML = '';
-        if (state.practiceType === 'resultat') {
-          el.answerInputPanel.className = '';
-          el.answerOptionsPanel.className = 'hidden';
-          return;
-        }
-        el.answerInputPanel.className = 'hidden';
-        el.answerOptionsPanel.className = '';
-
-        var correct = state.answer;
-        var opts = [correct];
-        while (opts.length < 4) {
-          var delta = rand(1, 10 + state.level * 5);
-          var sign = Math.random() > 0.5 ? 1 : -1;
-          var candidate = correct + delta * sign;
-          if (state.mode !== 'restes' && candidate < 0) { candidate = Math.abs(candidate); }
-          if (opts.indexOf(candidate) === -1) { opts.push(candidate); }
-        }
-        shuffle(opts);
-        for (var i = 0; i < opts.length; i++) {
-          (function (value) {
-            var btn = document.createElement('button');
-            btn.className = 'secondary';
-            btn.style.minWidth = '110px';
-            btn.style.minHeight = '54px';
-            btn.innerHTML = String(value);
-            btn.onclick = function () { checkAnswer(value); };
-            el.optionButtons.appendChild(btn);
-          })(opts[i]);
-        }
-      }
-
-      function motivationalSet() {
-        return [
-          'Cada intent et fa més fort amb les mates.',
-          'Ho estàs fent molt bé. Continua!',
-          'Els grans aprenentatges comencen pas a pas.',
-          'Tu pots amb aquest repte!',
-          'Practicar una mica cada dia és màgic.',
-          'Els errors també ens ajuden a aprendre.',
-          'Brilles cada vegada que ho intentes.',
-          'Endavant! Estàs millorant molt.',
-          'Respira, pensa i confia en tu.',
-          'Ets capaç de coses increïbles.'
-        ];
-      }
-
-      function refreshMotivation() {
-        var messages = motivationalSet();
-        var one = messages[rand(0, messages.length - 1)];
-        var two = messages[rand(0, messages.length - 1)];
-        el.motivationText.innerHTML = one;
-        el.dailyCheer.innerHTML = two;
-      }
-
-      function animateCelebrate() {
-        var old = el.dailyCheer.innerHTML;
-        refreshMotivation();
-        el.dailyCheer.style.transform = 'scale(1.04)';
-        el.dailyCheer.style.transition = 'transform 0.18s ease';
-        setTimeout(function () {
-          el.dailyCheer.style.transform = 'scale(1)';
-        }, 180);
-      }
-
-      function correctMessage() {
-        var arr = ['Molt bé!', 'Fantàstic!', 'Genial!', 'Ho has fet súper bé!', 'Bravíssim!', 'Ets increïble!'];
-        return state.sound === 'on' ? arr[rand(0, arr.length - 1)] : 'Correcte';
-      }
-
-      function wrongMessage() {
-        var base = 'No passa res. Ho tornem a provar.';
-        if (state.mode === 'divisions' && state.remainder) {
-          base += ' El quocient és ' + state.answer + ' i el residu és ' + state.remainder + '.';
-        }
-        return state.sound === 'on' ? base : 'Torna-ho a provar';
-      }
-
-      function checkAnswer(value) {
-        var user;
-        if (typeof value === 'number') {
-          user = value;
-        } else {
-          user = parseInt(el.answerInput.value, 10);
-        }
-        if (isNaN(user)) {
-          el.feedback.className = 'feedback bad';
-          el.feedback.innerHTML = 'Escriu un número.';
-          return;
-        }
-        if (user === state.answer) {
-          state.hits += 1;
-          state.streak += 1;
-          el.feedback.className = 'feedback good';
-          el.feedback.innerHTML = correctMessage() + (state.mode === 'divisions' && state.remainder ? ' Residu: ' + state.remainder + '.' : '');
-          renderStats();
-          saveProgress();
-          if (state.streak % 5 === 0) {
-            el.dailyCheer.innerHTML = '✨ Ja portes una gran ratxa. Continua així!';
-          }
-          setTimeout(generateProblem, 900);
-        } else {
-          state.misses += 1;
-          state.streak = 0;
-          el.feedback.className = 'feedback bad';
-          el.feedback.innerHTML = wrongMessage();
-          renderStats();
-          saveProgress();
-        }
-      }
-
-      function renderLesson() {
-        var html = '';
-        var ex = '';
-        if (state.mode === 'sumes') {
-          html += '<ol class="steps">';
-          html += '<li>Ajunta dues quantitats.</li>';
-          html += '<li>Pots comptar de mica en mica o fer salts.</li>';
-          html += '<li>També pots separar desenes i unitats.</li>';
-          html += '</ol>';
-          ex += '<div class="step-chip">Exemple</div>';
-          ex += '<p><strong>' + state.a + ' + ' + state.b + '</strong></p>';
-          ex += '<p>' + state.a + ' més ' + state.b + ' fa <strong>' + state.answer + '</strong>.</p>';
-          ex += '<p>Idea: comença pel número gran i afegeix l’altre.</p>';
-        } else if (state.mode === 'restes') {
-          html += '<ol class="steps">';
-          html += '<li>Treure és restar.</li>';
-          html += '<li>Pensa quant queda després de treure.</li>';
-          html += '<li>Pots comprovar sumant el resultat amb el número petit.</li>';
-          html += '</ol>';
-          ex += '<div class="step-chip">Exemple</div>';
-          ex += '<p><strong>' + state.a + ' − ' + state.b + '</strong></p>';
-          ex += '<p>Si a ' + state.a + ' li traiem ' + state.b + ', queden <strong>' + state.answer + '</strong>.</p>';
-          ex += '<p>Comprovació: ' + state.answer + ' + ' + state.b + ' = ' + state.a + '</p>';
-        } else if (state.mode === 'multiplicacions') {
-          html += '<ol class="steps">';
-          html += '<li>Multiplicar és fer grups iguals.</li>';
-          html += '<li>Primer pensa en la taula.</li>';
-          html += '<li>Després imagina grups: ' + state.a + ' grups de ' + state.b + '.</li>';
-          html += '</ol>';
-          ex += '<div class="step-chip">Exemple</div>';
-          ex += '<p><strong>' + state.a + ' × ' + state.b + '</strong></p>';
-          ex += '<p>' + state.a + ' grups de ' + state.b + ' fan <strong>' + state.answer + '</strong>.</p>';
-          ex += '<p>És el mateix que sumar ' + state.b + ' ' + state.a + ' vegades.</p>';
-        } else {
-          html += '<ol class="steps">';
-          html += '<li>Mira quantes vegades hi cap el divisor.</li>';
-          html += '<li>Escriu el número al quocient.</li>';
-          html += '<li>Multiplica, resta i baixa la xifra següent.</li>';
-          html += '<li>Quan el número que queda és més petit que el divisor, això és el residu.</li>';
-          html += '</ol>';
-          ex += '<div class="step-chip">Quocient: ' + state.answer + '</div>';
-          if (state.remainder) { ex += '<div class="step-chip">Residu: ' + state.remainder + '</div>'; }
-          ex += '<div class="division-work"><pre>' + buildDivisionVisual(state.a, state.b) + '</pre></div>';
-          ex += '<p style="margin-top:10px">Comprovació: ' + state.b + ' × ' + state.answer + (state.remainder ? ' + ' + state.remainder : '') + ' = ' + state.a + '</p>';
-        }
-        el.lessonContent.innerHTML = html;
-        el.exampleContent.innerHTML = ex;
-      }
-
-      function buildDivisionVisual(dividend, divisor) {
-        var digits = String(dividend).split('');
-        var current = '';
-        var quotient = '';
-        var lines = [];
-        var i, q, product, remainder;
-        lines.push('  ' + dividend + ' |' + divisor);
-        lines.push('' + repeatChar('-', String(dividend).length + 2) + '+' + repeatChar('-', String(divisor).length + 1));
-        for (i = 0; i < digits.length; i++) {
-          current += digits[i];
-          q = Math.floor(parseInt(current, 10) / divisor);
-          if (quotient !== '' || q > 0) { quotient += String(q); }
-          product = q * divisor;
-          remainder = parseInt(current, 10) - product;
-          lines.push('Baixem ' + digits[i] + ' → ' + current);
-          lines.push('Cap ' + q + ' vegada/es');
-          lines.push('Multipliquem: ' + q + ' × ' + divisor + ' = ' + product);
-          lines.push('Restem: ' + current + ' − ' + product + ' = ' + remainder);
-          current = String(remainder);
-        }
-        lines.push('Quocient = ' + (quotient === '' ? '0' : quotient));
-        lines.push('Residu = ' + current);
-        return lines.join('\n');
-      }
-
-      function repeatChar(ch, n) {
-        var out = '';
-        for (var i = 0; i < n; i++) { out += ch; }
-        return out;
-      }
-
-      function bindEvents() {
-        for (var i = 0; i < el.modeButtons.length; i++) {
-          el.modeButtons[i].onclick = function () { setMode(this.getAttribute('data-mode')); };
-        }
-        el.level.onchange = function () {
-          state.level = parseInt(this.value, 10);
-          saveProgress();
-          generateProblem();
+          target.value += text;
+          if (state.mode !== 'divisions') renderVerticalOp('pending');
         };
-        el.practiceType.onchange = function () {
-          state.practiceType = this.value;
-          saveProgress();
-          renderAnswerMode();
-        };
-        el.soundToggle.onchange = function () {
-          state.sound = this.value;
-          saveProgress();
-        };
-        el.newExerciseBtn.onclick = generateProblem;
-        el.celebrateBtn.onclick = animateCelebrate;
-        el.checkBtn.onclick = function () { checkAnswer(); };
-        el.answerInput.onkeydown = function (e) {
-          e = e || window.event;
-          if (e.keyCode === 13) { checkAnswer(); }
-        };
-        var keys = document.querySelectorAll('.key');
-        for (var k = 0; k < keys.length; k++) {
-          keys[k].onclick = function () {
-            var text = this.innerHTML;
-            if (text === 'Esborra') { el.answerInput.value = ''; return; }
-            if (text === '⌫') { el.answerInput.value = el.answerInput.value.slice(0, -1); return; }
-            if (text === '−') {
-              if (el.answerInput.value.indexOf('-') === 0) { el.answerInput.value = el.answerInput.value.slice(1); }
-              else { el.answerInput.value = '-' + el.answerInput.value; }
-              return;
-            }
-            el.answerInput.value += text;
-          };
-        }
       }
+    }
 
-      function init() {
-        loadProgress();
-        el.level.value = String(state.level);
-        el.practiceType.value = state.practiceType;
-        el.soundToggle.value = state.sound;
-        bindEvents();
-        refreshMotivation();
-        renderStats();
-        setMode(state.mode);
-      }
+    /* ── Init ── */
+    function init() {
+      load();
+      el.level.value = String(state.level);
+      el.practiceType.value = state.practiceType;
+      el.soundToggle.value = state.sound;
+      bindEvents();
+      refreshMotivation();
+      renderStats();
+      setMode(state.mode);
+    }
 
-      init();
-    })();
+    init();
+
+    /* ── Register Service Worker ── */
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    }
+  })();
   </script>
 </body>
 </html>

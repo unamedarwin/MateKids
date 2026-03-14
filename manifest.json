@@ -1,0 +1,15 @@
+{
+  "name": "MateKids - Aprèn mates jugant",
+  "short_name": "MateKids",
+  "description": "Joc educatiu de matemàtiques per a nens: sumes, restes, multiplicacions i divisions pas a pas.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f8ff",
+  "theme_color": "#4f46e5",
+  "lang": "ca",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
