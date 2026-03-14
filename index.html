@@ -163,22 +163,46 @@
     .division-process-bad { margin-top:12px; padding:12px; border-radius:16px; background:#fef2f2; color:#991b1b; font-weight:800; text-align:center; }
 
     /* ── Innovamat-style operation (sumes, restes, multiplicacions) ── */
-    .innova-op { display:flex; flex-direction:column; align-items:flex-start; gap:6px; margin:16px auto 0; max-width:520px; }
-    .innova-row { display:flex; align-items:center; gap:12px; }
-    .innova-sign { width:32px; font-size:26px; font-weight:900; color:var(--primary); text-align:center; flex-shrink:0; }
-    .innova-box { min-width:72px; padding:8px 14px; border-radius:16px; border:3px solid #3b82f6; background:#eff6ff; font-size:28px; font-weight:900; color:#1e40af; text-align:center; }
-    .innova-box.result { border-color:#16a34a; background:#f0fdf4; color:#15803d; border-style:dashed; min-width:72px; }
+    .innova-op { display:flex; flex-direction:column; align-items:flex-start; gap:10px; margin:16px auto 0; max-width:600px; }
+    .innova-row { display:flex; align-items:center; gap:16px; }
+    .innova-sign { width:38px; font-size:32px; font-weight:900; color:var(--primary); text-align:center; flex-shrink:0; }
+    .innova-box { min-width:90px; padding:10px 18px; border-radius:18px; border:3px solid #3b82f6; background:#eff6ff; font-size:34px; font-weight:900; color:#1e40af; text-align:center; }
+    .innova-box.result { border-color:#16a34a; background:#f0fdf4; color:#15803d; border-style:dashed; }
     .innova-box.result.correct { border-style:solid; background:#dcfce7; color:#166534; }
     .innova-box.result.wrong { border-color:var(--bad); background:#fef2f2; color:var(--bad); border-style:solid; }
-    .innova-tally { display:flex; align-items:flex-end; gap:4px; flex-wrap:wrap; max-width:260px; }
-    .innova-tally-group { display:flex; align-items:flex-end; gap:2px; margin-right:4px; }
-    .innova-bar { display:inline-block; width:5px; background:#f59e0b; border-radius:3px; }
-    .innova-bar.tall  { height:32px; }  /* tens */
-    .innova-bar.short { height:14px; background:#f59e0b; width:4px; }  /* units — short horizontal */
-    .innova-cross { display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; color:#f59e0b; width:14px; height:14px; }
-    .innova-hundred { display:inline-block; width:14px; height:22px; background:#6366f1; border-radius:3px; margin-right:2px; }
-    .innova-line-wrap { padding-left:44px; width:100%; }
-    .innova-line { height:3px; background:#1f2937; border-radius:2px; width:100%; max-width:340px; }
+    .innova-tally { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
+    .innova-tally-group { display:flex; align-items:flex-end; gap:6px; flex-wrap:wrap; margin-right:4px; max-width:100%; }
+    /* Tens bar */
+    .innova-bar { display:inline-block; width:14px; background:#f59e0b; border-radius:4px; flex-shrink:0; transition:background .15s, transform .1s, opacity .15s; }
+    .innova-bar.tall { height:52px; }
+    .innova-bar.tappable { cursor:pointer; touch-action:manipulation; }
+    .innova-bar.tappable:active { transform:scale(.8); }
+    .innova-bar.step-active { box-shadow:0 0 0 5px rgba(245,158,11,.4); }
+    .innova-bar.crossed { background:#ef4444 !important; opacity:.55; cursor:pointer; touch-action:manipulation; }
+    .innova-bar.crossed:active { transform:scale(.8); }
+    .innova-bar.exploded { background:#fca5a5 !important; opacity:.28; cursor:pointer; touch-action:manipulation; }
+    .innova-bar.exploded:active { transform:scale(.8); }
+    /* Units cross */
+    .innova-cross { display:inline-flex; align-items:center; justify-content:center; font-size:22px; font-weight:900; color:#f59e0b; width:32px; height:32px; flex-shrink:0; transition:color .15s, transform .1s, opacity .15s; }
+    .innova-cross.tappable { cursor:pointer; touch-action:manipulation; }
+    .innova-cross.tappable:active { transform:scale(.8); }
+    .innova-cross.step-active { box-shadow:0 0 0 5px rgba(245,158,11,.4); border-radius:50%; }
+    .innova-cross.crossed { color:#ef4444 !important; opacity:.55; text-decoration:line-through; cursor:pointer; touch-action:manipulation; }
+    .innova-cross.crossed:active { transform:scale(.8); }
+    /* Hundreds block */
+    .innova-hundred { display:inline-block; width:20px; height:42px; background:#6366f1; border-radius:4px; flex-shrink:0; transition:background .15s, transform .1s; }
+    .innova-hundred.tappable { cursor:pointer; touch-action:manipulation; }
+    .innova-hundred.tappable:active { transform:scale(.8); }
+    .innova-hundred.crossed { background:#ef4444 !important; opacity:.55; cursor:pointer; touch-action:manipulation; }
+    .innova-hundred.exploded { background:#c4b5fd !important; opacity:.28; cursor:pointer; touch-action:manipulation; }
+    /* Separator */
+    .innova-line-wrap { padding-left:54px; width:100%; }
+    .innova-line { height:3px; background:#1f2937; border-radius:2px; width:100%; max-width:400px; }
+    /* Step prompts */
+    .vop-prompt { margin-top:2px; padding:14px 18px; background:#eef2ff; border-radius:16px; border:1px solid #c7d2fe; max-width:500px; font-size:18px; font-weight:800; color:var(--primary); }
+    .vop-carry { padding:12px 16px; background:#fef9c3; border-radius:14px; border:1px solid #fde047; font-size:16px; font-weight:700; color:#854d0e; max-width:500px; }
+    .vop-counter { padding:12px 16px; background:#f9fafb; border-radius:14px; border:1px solid #e5e7eb; font-size:17px; font-weight:700; color:var(--muted); max-width:500px; }
+    .vop-counter.done { color:var(--good); background:#ecfdf5; border-color:#86efac; }
   </style>
 </head>
 <body>
@@ -314,7 +338,8 @@
       a: 0, b: 0, answer: 0, remainder: 0,
       hits: 0, misses: 0, streak: 0, stars: 0, medals: 0, adventureStep: 0,
       divisionFlow: [], divisionFieldOrder: [], divisionEntries: {},
-      divisionPointer: 0, divisionChecked: false
+      divisionPointer: 0, divisionChecked: false,
+      vop: null
     };
 
     /* ── DOM refs ── */
@@ -821,6 +846,343 @@
       el.verticalOp.className = 'innova-op';
     }
 
+    /* ── VOP interactive (sumes & restes) ── */
+    function buildVopMarks(n) {
+      var marks = [];
+      var id = 0;
+      var h = Math.min(Math.floor(n / 100), 9);
+      var t = Math.floor((n % 100) / 10);
+      var u = n % 10;
+      for (var i = 0; i < h; i++) marks.push({ id: id++, type: 'hundred', state: 'normal' });
+      for (var j = 0; j < t; j++) marks.push({ id: id++, type: 'bar', state: 'normal' });
+      for (var k = 0; k < u; k++) marks.push({ id: id++, type: 'cross', state: 'normal' });
+      return marks;
+    }
+
+    function initVop() {
+      if (state.mode === 'sumes') {
+        var aTens = Math.floor(state.a / 10) * 10;
+        var bTens = Math.floor(state.b / 10) * 10;
+        var aUnits = state.a % 10;
+        var bUnits = state.b % 10;
+        var firstStep = (aTens > 0 || bTens > 0) ? 'tens' : 'units';
+        state.vop = {
+          mode: 'sumes', step: firstStep,
+          aTens: aTens, bTens: bTens, aUnits: aUnits, bUnits: bUnits,
+          tensResult: firstStep === 'units' ? 0 : null,
+          unitsResult: null
+        };
+      } else if (state.mode === 'restes') {
+        var marks = buildVopMarks(state.a);
+        state.vop = { mode: 'restes', marks: marks, nextMarkId: marks.length, removed: 0 };
+      } else {
+        state.vop = null;
+      }
+    }
+
+    function tapVopMark(id) {
+      if (!state.vop || state.vop.mode !== 'restes') return;
+      var marks = state.vop.marks;
+      var mark = null;
+      for (var i = 0; i < marks.length; i++) {
+        if (marks[i].id === id) { mark = marks[i]; break; }
+      }
+      if (!mark) return;
+
+      if (mark.state === 'normal') {
+        /* First tap: explode bar/hundred, or cross a unit */
+        if (mark.type === 'bar') {
+          mark.state = 'exploded';
+          for (var k = 0; k < 10; k++) marks.push({ id: state.vop.nextMarkId++, type: 'cross', state: 'normal', parentId: mark.id });
+        } else if (mark.type === 'hundred') {
+          mark.state = 'exploded';
+          for (var j = 0; j < 10; j++) marks.push({ id: state.vop.nextMarkId++, type: 'bar', state: 'normal', parentId: mark.id });
+        } else if (mark.type === 'cross') {
+          mark.state = 'crossed';
+          state.vop.removed += 1;
+        }
+
+      } else if (mark.state === 'exploded') {
+        /* Second tap on an exploded bar: cross it directly (remove children) */
+        if (mark.type === 'bar' || mark.type === 'hundred') {
+          var childrenCrossed = 0;
+          state.vop.marks = marks = marks.filter(function (m) {
+            if (m.parentId === mark.id) {
+              if (m.state === 'crossed') childrenCrossed++;
+              return false;
+            }
+            return true;
+          });
+          mark.state = 'crossed';
+          mark.directCredit = 10 - childrenCrossed;
+          state.vop.removed += mark.directCredit;
+        }
+
+      } else if (mark.state === 'crossed') {
+        /* Tap on a crossed mark: undo it */
+        if (mark.type === 'bar' || mark.type === 'hundred') {
+          /* Restore bar to exploded + re-add 10 fresh crosses */
+          state.vop.removed -= (mark.directCredit || 0);
+          mark.directCredit = 0;
+          mark.state = 'exploded';
+          for (var r = 0; r < 10; r++) marks.push({ id: state.vop.nextMarkId++, type: 'cross', state: 'normal', parentId: mark.id });
+        } else if (mark.type === 'cross') {
+          /* Undo a crossed cross */
+          mark.state = 'normal';
+          state.vop.removed -= 1;
+        }
+      }
+
+      renderRestesVop();
+      if (state.vop.removed >= state.b) { completeRestes(); }
+    }
+
+    function completeRestes() {
+      el.feedback.className = 'feedback good';
+      el.feedback.textContent = correctMessage();
+      state.hits += 1; state.streak += 1; state.stars += 1; state.adventureStep += 1;
+      if (state.adventureStep > 0 && state.adventureStep % 10 === 0) {
+        state.medals += 1;
+        el.dailyCheer.textContent = '🏅 Has arribat al tresor i has guanyat una medalla!';
+      }
+      renderStats(); save();
+      setTimeout(generateProblem, 1200);
+    }
+
+    function completeSum() {
+      el.feedback.className = 'feedback good';
+      el.feedback.textContent = correctMessage();
+      state.hits += 1; state.streak += 1; state.stars += 1; state.adventureStep += 1;
+      if (state.adventureStep > 0 && state.adventureStep % 10 === 0) {
+        state.medals += 1;
+        el.dailyCheer.textContent = '🏅 Has arribat al tresor i has guanyat una medalla!';
+      }
+      renderStats(); save();
+      setTimeout(generateProblem, 1200);
+    }
+
+    function submitVopStep() {
+      var vop = state.vop;
+      if (!vop || vop.mode !== 'sumes') { checkAnswer(); return; }
+      var val = parseInt(el.answerInput.value, 10);
+      if (isNaN(val)) {
+        el.feedback.className = 'feedback bad';
+        el.feedback.textContent = 'Escriu un número.';
+        return;
+      }
+      if (vop.step === 'tens') {
+        var expectedT = vop.aTens + vop.bTens;
+        if (val === expectedT) {
+          vop.tensResult = val; vop.step = 'units';
+          el.answerInput.value = ''; el.feedback.textContent = '';
+          renderSumesVop();
+        } else {
+          el.feedback.className = 'feedback bad';
+          el.feedback.textContent = 'Les desenes no. Torna-ho a intentar.';
+        }
+      } else if (vop.step === 'units') {
+        var expectedU = vop.aUnits + vop.bUnits;
+        if (val === expectedU) {
+          vop.unitsResult = val;
+          el.answerInput.value = ''; el.feedback.textContent = '';
+          if (vop.unitsResult >= 10) {
+            vop.step = 'carry';
+            renderSumesVop();
+          } else {
+            vop.step = 'done';
+            renderSumesVop();
+            completeSum();
+          }
+        } else {
+          el.feedback.className = 'feedback bad';
+          el.feedback.textContent = 'Les unitats no. Torna-ho a intentar.';
+        }
+      } else if (vop.step === 'carry') {
+        var expectedC = vop.tensResult + vop.unitsResult;
+        if (val === expectedC) {
+          vop.step = 'done';
+          el.answerInput.value = ''; el.feedback.textContent = '';
+          renderSumesVop();
+          completeSum();
+        } else {
+          el.feedback.className = 'feedback bad';
+          el.feedback.textContent = 'Suma les dues parts. Torna-ho a intentar.';
+        }
+      }
+    }
+
+    function tallyHtmlVop(n, highlightTens, highlightUnits) {
+      if (n <= 0) return '';
+      var h = Math.floor(n / 100); var t = Math.floor((n % 100) / 10); var u = n % 10;
+      var s = '<div class="innova-tally">';
+      if (h > 0) {
+        s += '<div class="innova-tally-group">';
+        for (var i = 0; i < Math.min(h, 9); i++) s += '<span class="innova-hundred"></span>';
+        s += '</div>';
+      }
+      if (t > 0) {
+        s += '<div class="innova-tally-group">';
+        for (var j = 0; j < t; j++) s += '<span class="innova-bar tall' + (highlightTens ? ' step-active' : '') + '"></span>';
+        s += '</div>';
+      }
+      if (u > 0) {
+        s += '<div class="innova-tally-group">';
+        for (var k = 0; k < u; k++) s += '<span class="innova-cross' + (highlightUnits ? ' step-active' : '') + '">×</span>';
+        s += '</div>';
+      }
+      s += '</div>';
+      return s;
+    }
+
+    function renderSumesVop() {
+      var vop = state.vop;
+      var isTens = vop.step === 'tens';
+      var isUnits = vop.step === 'units';
+      var isCarry = vop.step === 'carry';
+      var isDone = vop.step === 'done';
+      var showTally = state.a <= 99 && state.b <= 99;
+      var s = '';
+
+      /* Row A */
+      s += '<div class="innova-row"><div class="innova-sign"></div>';
+      s += '<div class="innova-box">' + state.a + '</div>';
+      if (showTally) s += tallyHtmlVop(state.a, isTens, isUnits);
+      s += '</div>';
+
+      /* Row B */
+      s += '<div class="innova-row"><div class="innova-sign">+</div>';
+      s += '<div class="innova-box">' + state.b + '</div>';
+      if (showTally) s += tallyHtmlVop(state.b, isTens, isUnits);
+      s += '</div>';
+
+      /* Separator */
+      s += '<div class="innova-line-wrap"><div class="innova-line"></div></div>';
+
+      /* Result line 1: tens */
+      s += '<div class="innova-row"><div class="innova-sign"></div>';
+      if (vop.tensResult !== null && !isTens) {
+        s += '<div class="innova-box result' + (isDone ? ' correct' : '') + '">' + vop.tensResult + '</div>';
+      } else {
+        s += '<div class="innova-box result">?</div>';
+      }
+      s += '<span style="color:var(--muted);font-size:13px;margin-left:8px;align-self:center">desenes</span>';
+      s += '</div>';
+
+      /* Result line 2: units (shown after tens step) */
+      if (!isTens) {
+        s += '<div class="innova-row"><div class="innova-sign">+</div>';
+        if (vop.unitsResult !== null && (isCarry || isDone)) {
+          s += '<div class="innova-box result' + (isDone ? ' correct' : '') + '">' + vop.unitsResult + '</div>';
+        } else {
+          s += '<div class="innova-box result">?</div>';
+        }
+        s += '<span style="color:var(--muted);font-size:13px;margin-left:8px;align-self:center">unitats</span>';
+        s += '</div>';
+
+        /* Final combined result */
+        if (isCarry || isDone) {
+          s += '<div class="innova-line-wrap"><div class="innova-line"></div></div>';
+          s += '<div class="innova-row"><div class="innova-sign"></div>';
+          s += isDone ? '<div class="innova-box result correct">' + state.answer + '</div>'
+                      : '<div class="innova-box result">?</div>';
+          s += '</div>';
+        }
+      }
+
+      /* Step prompt */
+      if (isTens) {
+        s += '<div class="vop-prompt">Suma les desenes: ' + vop.aTens + ' + ' + vop.bTens + ' = ?</div>';
+      } else if (isUnits) {
+        s += '<div class="vop-prompt">Suma les unitats: ' + vop.aUnits + ' + ' + vop.bUnits + ' = ?</div>';
+      } else if (isCarry) {
+        s += '<div class="vop-carry">Ara suma les dues parts: ' + vop.tensResult + ' + ' + vop.unitsResult + ' = ?</div>';
+      }
+
+      el.verticalOp.innerHTML = s;
+      el.verticalOp.className = 'innova-op';
+    }
+
+    function renderRestesVop() {
+      var vop = state.vop;
+      var marks = vop.marks;
+      var hundreds = [], bars = [], crosses = [];
+      for (var i = 0; i < marks.length; i++) {
+        if (marks[i].type === 'hundred') hundreds.push(marks[i]);
+        else if (marks[i].type === 'bar') bars.push(marks[i]);
+        else crosses.push(marks[i]);
+      }
+      var s = '';
+
+      /* Row A with tappable marks */
+      s += '<div class="innova-row"><div class="innova-sign"></div>';
+      s += '<div class="innova-box">' + state.a + '</div>';
+      s += '<div class="innova-tally">';
+      if (hundreds.length > 0) {
+        s += '<div class="innova-tally-group">';
+        for (var h = 0; h < hundreds.length; h++) {
+          var mh = hundreds[h];
+          s += '<span class="innova-hundred' +
+            (mh.state === 'normal' ? ' tappable' : '') +
+            (mh.state === 'exploded' ? ' exploded' : '') +
+            (mh.state === 'crossed' ? ' crossed' : '') +
+            '" data-mark-id="' + mh.id + '"></span>';
+        }
+        s += '</div>';
+      }
+      if (bars.length > 0) {
+        s += '<div class="innova-tally-group">';
+        for (var b = 0; b < bars.length; b++) {
+          var mb = bars[b];
+          s += '<span class="innova-bar tall' +
+            (mb.state === 'exploded' ? ' exploded' : '') +
+            (mb.state === 'crossed' ? ' crossed' : ' tappable') +
+            '" data-mark-id="' + mb.id + '"></span>';
+        }
+        s += '</div>';
+      }
+      if (crosses.length > 0) {
+        s += '<div class="innova-tally-group">';
+        for (var c = 0; c < crosses.length; c++) {
+          var mc = crosses[c];
+          s += '<span class="innova-cross' +
+            (mc.state === 'crossed' ? ' crossed' : ' tappable') +
+            '" data-mark-id="' + mc.id + '">×</span>';
+        }
+        s += '</div>';
+      }
+      s += '</div></div>';
+
+      /* Row B — no marks */
+      s += '<div class="innova-row"><div class="innova-sign">−</div>';
+      s += '<div class="innova-box">' + state.b + '</div>';
+      s += '</div>';
+
+      /* Separator */
+      s += '<div class="innova-line-wrap"><div class="innova-line"></div></div>';
+
+      /* Result row */
+      var remaining = state.a - vop.removed;
+      s += '<div class="innova-row"><div class="innova-sign"></div>';
+      if (vop.removed === 0) {
+        s += '<div class="innova-box result">?</div>';
+      } else {
+        s += '<div class="innova-box result' + (vop.removed >= state.b ? ' correct' : '') + '">' + remaining + '</div>';
+      }
+      s += '</div>';
+
+      /* Counter */
+      s += '<div class="vop-counter' + (vop.removed >= state.b ? ' done' : '') + '">';
+      if (vop.removed < state.b) {
+        s += 'Tatxa ' + vop.removed + ' de ' + state.b + ' — en falten ' + (state.b - vop.removed);
+      } else {
+        s += '✓ Ja tens la resposta!';
+      }
+      s += '</div>';
+
+      el.verticalOp.innerHTML = s;
+      el.verticalOp.className = 'innova-op';
+    }
+
     /* ── Answer mode switching ── */
     function renderAnswerMode() {
       el.optionButtons.innerHTML = '';
@@ -833,8 +1195,27 @@
       }
       el.divisionTrainer.className = 'division-trainer hidden';
       el.standardPanel.className = '';
-      /* Hide inline problem text — vertical op replaces it */
       el.problemText.className = 'big-problem hidden';
+
+      /* Restes VOP (tap mode) — only for numbers ≤ 99 */
+      if (state.mode === 'restes' && state.a <= 99) {
+        initVop();
+        renderRestesVop();
+        el.answerInputPanel.className = 'hidden';
+        el.answerOptionsPanel.className = 'hidden';
+        return;
+      }
+
+      /* Sumes VOP (step input mode) */
+      if (state.mode === 'sumes') {
+        initVop();
+        renderSumesVop();
+        el.answerInputPanel.className = '';
+        el.answerOptionsPanel.className = 'hidden';
+        return;
+      }
+
+      /* Multiplicacions (and large-number restes) — static display */
       renderVerticalOp('pending');
       if (state.practiceType === 'resultat') {
         el.answerInputPanel.className = '';
@@ -849,7 +1230,7 @@
         var delta = rand(1, 10 + state.level * 5);
         var sign = Math.random() > 0.5 ? 1 : -1;
         var candidate = correct + delta * sign;
-        if (state.mode !== 'restes' && candidate < 0) candidate = Math.abs(candidate);
+        if (candidate < 0) candidate = Math.abs(candidate);
         if (opts.indexOf(candidate) === -1) opts.push(candidate);
       }
       shuffle(opts);
@@ -935,14 +1316,14 @@
           state.medals += 1;
           el.dailyCheer.textContent = '🏅 Has arribat al tresor i has guanyat una medalla!';
         }
-        if (state.mode !== 'divisions') renderVerticalOp('correct');
+        if (state.mode === 'multiplicacions') renderVerticalOp('correct');
         el.feedback.className = 'feedback good';
         el.feedback.textContent = correctMessage();
         renderStats(); save();
         setTimeout(generateProblem, 900);
       } else {
         state.misses += 1; state.streak = 0;
-        if (state.mode !== 'divisions') renderVerticalOp('wrong');
+        if (state.mode === 'multiplicacions') renderVerticalOp('wrong');
         el.feedback.className = 'feedback bad';
         el.feedback.textContent = 'No passa res. Ho tornem a provar.';
         renderStats(); save();
@@ -989,31 +1370,50 @@
       el.practiceType.onchange = function () { state.practiceType = this.value; save(); renderAnswerMode(); };
       el.soundToggle.onchange = function () { state.sound = this.value; save(); };
       el.newExerciseBtn.onclick = generateProblem;
-      el.checkBtn.onclick = function () { checkAnswer(); };
+      el.checkBtn.onclick = function () {
+        if (state.mode === 'sumes') { submitVopStep(); } else { checkAnswer(); }
+      };
       el.placeDivisionBtn.onclick = placeDivisionValue;
       el.undoDivisionBtn.onclick = undoDivisionValue;
       el.checkDivisionProcessBtn.onclick = validateDivisionProcess;
       el.divisionInput.onkeydown = function (e) { if ((e || window.event).keyCode === 13) placeDivisionValue(); };
-      el.answerInput.onkeydown = function (e) { if ((e || window.event).keyCode === 13) checkAnswer(); };
+      el.answerInput.onkeydown = function (e) {
+        if ((e || window.event).keyCode === 13) {
+          if (state.mode === 'sumes') { submitVopStep(); } else { checkAnswer(); }
+        }
+      };
       el.answerInput.oninput = function () {
-        if (state.mode !== 'divisions') renderVerticalOp('pending');
+        if (state.mode === 'multiplicacions') renderVerticalOp('pending');
       };
       el.celebrateBtn.onclick = function () { refreshMotivation(); };
+
+      /* Touch/click delegation for restes tally marks */
+      el.verticalOp.addEventListener('touchend', function (e) {
+        var t = e.target;
+        var id = t && t.getAttribute && t.getAttribute('data-mark-id');
+        if (id !== null && id !== undefined && id !== '') {
+          e.preventDefault();
+          tapVopMark(parseInt(id, 10));
+        }
+      }, { passive: false });
+      el.verticalOp.addEventListener('click', function (e) {
+        var t = e.target;
+        var id = t && t.getAttribute && t.getAttribute('data-mark-id');
+        if (id !== null && id !== undefined && id !== '') tapVopMark(parseInt(id, 10));
+      });
 
       var keys = document.querySelectorAll('.key');
       for (var k = 0; k < keys.length; k++) {
         keys[k].onclick = function () {
           var text = this.textContent;
           var target = state.mode === 'divisions' ? el.divisionInput : el.answerInput;
-          if (text === 'Esborra') { target.value = ''; renderVerticalOp('pending'); return; }
-          if (text === '⌫') { target.value = target.value.slice(0, -1); if (state.mode !== 'divisions') renderVerticalOp('pending'); return; }
+          if (text === 'Esborra') { target.value = ''; return; }
+          if (text === '⌫') { target.value = target.value.slice(0, -1); return; }
           if (text === '−') {
             target.value = target.value.indexOf('-') === 0 ? target.value.slice(1) : '-' + target.value;
-            if (state.mode !== 'divisions') renderVerticalOp('pending');
             return;
           }
           target.value += text;
-          if (state.mode !== 'divisions') renderVerticalOp('pending');
         };
       }
     }
