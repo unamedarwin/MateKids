@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MateKids">
+  <meta name="theme-color" content="#4f46e5">
+  <title>MateKids - Sumes, Restes, Multiplicacions i Divisions</title>
+  <style>
+    :root {
+      --bg: #f7f8ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --primary-2: #7c3aed;
+      --good: #0f9d58;
+      --bad: #d93025;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --yellow: #fff4bf;
+      --shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+    body { min-height: 100vh; }
+    .app { max-width: 920px; margin: 0 auto; padding: 14px 14px 30px; }
+    .hero {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #ec4899);
+      color: white;
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero:before, .hero:after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      pointer-events: none;
+    }
+    .hero:before { width: 140px; height: 140px; right: -30px; top: -20px; }
+    .hero:after { width: 90px; height: 90px; left: -20px; bottom: -20px; }
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .hero-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-mascot {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12);
+    }
+    .hero h1 { margin: 0 0 8px; font-size: 32px; line-height: 1.1; }
+    .hero p { margin: 0; font-size: 16px; line-height: 1.4; opacity: 0.96; font-weight: 600; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+    .stat { background: rgba(255,255,255,0.18); border-radius: 20px; padding: 12px; text-align: center; backdrop-filter: blur(4px); }
+    .stat strong { display: block; font-size: 22px; }
+    .section { margin-top: 16px; }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .welcome-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 16px 18px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #fdf2f8, #eef2ff 55%, #ecfeff);
+      border: 1px solid #e9d5ff;
+    }
+    .welcome-kicker {
+      display: inline-block;
+      margin-bottom: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .welcome-banner h2 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.15;
+    }
+    .welcome-banner p {
+      margin: 0;
+      color: #4b5563;
+      font-size: 16px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+    .welcome-stars {
+      font-size: 34px;
+      white-space: nowrap;
+    }
+    .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (min-width: 720px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+    .mode-btn {
+      border: 0;
+      border-radius: 24px;
+      padding: 16px 10px;
+      background: linear-gradient(180deg, #f8fafc, #eef2ff);
+      color: var(--ink);
+      width: 100%;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      min-height: 104px;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.10), inset 0 0 0 2px transparent;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .mode-btn.active { background: linear-gradient(180deg, #e0e7ff, #ede9fe); box-shadow: 0 10px 24px rgba(79, 70, 229, 0.18), inset 0 0 0 2px var(--primary); }
+    .mode-btn:active { transform: scale(0.98); }
+    .mode-emoji { display: block; font-size: 28px; margin-bottom: 6px; }
+    .toolbar { display: grid; gap: 10px; margin-bottom: 14px; }
+    .mini-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .mini-tab {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    @media (min-width: 700px) { .toolbar { grid-template-columns: 1.2fr 1fr 1fr 1fr; } }
+    label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; font-weight: 700; }
+    select, input[type="text"], input[type="number"] {
+      width: 100%; border-radius: 16px; border: 2px solid var(--line); padding: 12px 14px; font-size: 17px; background: #fff;
+    }
+    .primary, .secondary, .ghost {
+      border: 0; border-radius: 18px; padding: 13px 16px; font-size: 17px; font-weight: 700; cursor: pointer;
+    }
+    .primary { background: var(--primary); color: #fff; }
+    .secondary { background: #eef2ff; color: var(--primary); }
+    .ghost { background: #f3f4f6; color: var(--ink); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .problem {
+      text-align: center; padding: 8px 0 0;
+    }
+    .operation-badge {
+      display: inline-block; padding: 7px 12px; border-radius: 999px; background: var(--yellow); font-weight: 800; font-size: 14px;
+    }
+    .big-problem {
+      font-size: 46px; font-weight: 900; letter-spacing: 1px; margin: 12px 0 10px;
+    }
+    .sub { color: var(--muted); font-size: 16px; margin-top: -2px; font-weight: 600; }
+    .answer-row { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 16px 0 8px; flex-wrap: wrap; }
+    .answer {
+      width: 180px; max-width: 100%; text-align: center; font-size: 30px; font-weight: 900; border-radius: 20px; border: 3px solid #d1d5db; padding: 12px;
+      box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .feedback {
+      min-height: 28px; text-align: center; font-size: 18px; font-weight: 700; margin-top: 10px;
+    }
+    .good { color: var(--good); }
+    .bad { color: var(--bad); }
+    .lesson-grid { display: grid; gap: 14px; }
+    .journey-grid { display: grid; gap: 14px; }
+    @media (min-width: 840px) { .journey-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .journey-card {
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+      text-align: center;
+    }
+    .journey-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 10px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      background: linear-gradient(135deg, #ede9fe, #ecfeff);
+    }
+    .journey-card h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+    .journey-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+    @media (min-width: 840px) { .lesson-grid { grid-template-columns: 1.05fr 1fr; } }
+    .mini-card { background: #f9fafb; border-radius: 18px; padding: 14px; border: 1px solid var(--line); }
+    .mini-card h3 { margin: 0 0 10px; font-size: 18px; }
+    .steps { margin: 0; padding-left: 20px; }
+    .steps li { margin: 8px 0; line-height: 1.35; }
+    .keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+    .key { font-size: 24px; font-weight: 700; border: 0; border-radius: 18px; padding: 16px 0; background: #f3f4f6; cursor: pointer; }
+    .key.wide { grid-column: span 3; }
+    .division-work {
+      display: inline-block; text-align: left; margin: 8px auto 0; font-family: "Courier New", monospace; background: #fff; border: 2px dashed #c7d2fe; border-radius: 18px; padding: 14px;
+      max-width: 100%; overflow-x: auto;
+    }
+    .division-work pre { margin: 0; font-size: 18px; line-height: 1.35; }
+    .step-chip { display: inline-block; background: #eef2ff; color: var(--primary); padding: 7px 10px; border-radius: 999px; margin: 0 6px 6px 0; font-size: 13px; font-weight: 700; }
+    .footer-note { color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .cheer-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ecfeff, #eef2ff);
+      border: 1px solid #c7d2fe;
+      text-align: center;
+    }
+    .cheer-title {
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+    .cheer-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1f2937;
+      line-height: 1.35;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="hero">
+      <div class="hero-top">
+        <div class="hero-brand">
+          <div class="hero-mascot" aria-hidden="true">🦊</div>
+          <div>
+            <h1>MateKids</h1>
+            <p>Aprèn, juga i supera reptes matemàtics cada dia.</p>
+          </div>
+        </div>
+        <div class="mini-tabs" aria-hidden="true">
+          <div class="mini-tab">Aventura</div>
+          <div class="mini-tab">Joc</div>
+          <div class="mini-tab">Reptes</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong id="scoreHits">0</strong>Encerts</div>
+        <div class="stat"><strong id="scoreMisses">0</strong>Errors</div>
+        <div class="stat"><strong id="scoreStreak">0</strong>Ratxa</div>
+      </div>
+    </div>
+
+    <div class="section journey-grid">
+      <div class="journey-card">
+        <div class="journey-icon" aria-hidden="true">🎯</div>
+        <h3>Repte del moment</h3>
+        <p>Posa a prova el teu enginy i continua avançant pas a pas.</p>
+      </div>
+      <div class="journey-card">
+        <div class="journey-icon" aria-hidden="true">🏆</div>
+        <h3>Guanya estrelles</h3>
+        <p>Cada resposta bona t’acosta a noves fites i més confiança.</p>
+      </div>
+      <div class="journey-card">
+        <div class="journey-icon" aria-hidden="true">🚀</div>
+        <h3>Segueix millorant</h3>
+        <p>Practica una mica cada dia i veuràs com avances molt.</p>
+      </div>
+    </div>
+
+    <div class="section card">
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <div class="welcome-kicker">Aprendre jugant</div>
+          <h2>Preparat per brillar amb els nombres?</h2>
+          <p id="motivationText">Cada pas compta. Tu pots aconseguir-ho!</p>
+        </div>
+        <div class="welcome-stars" aria-hidden="true">⭐ 🌈 ✨</div>
+      </div>
+      <div class="grid-4">
+        <button class="mode-btn active" data-mode="sumes"><span class="mode-emoji">➕</span>Sumes</button>
+        <button class="mode-btn" data-mode="restes"><span class="mode-emoji">➖</span>Restes</button>
+        <button class="mode-btn" data-mode="multiplicacions"><span class="mode-emoji">✖️</span>Multiplicacions</button>
+        <button class="mode-btn" data-mode="divisions"><span class="mode-emoji">➗</span>Divisions</button>
+      </div>
+    </div>
+
+    <div class="section card">
+      <div class="toolbar">
+        <div>
+          <label for="level">Nivell</label>
+          <select id="level">
+            <option value="1">1 - Molt fàcil</option>
+            <option value="2">2 - Fàcil</option>
+            <option value="3" selected>3 - Mitjà</option>
+            <option value="4">4 - Avançat</option>
+          </select>
+        </div>
+        <div>
+          <label for="practiceType">Tipus</label>
+          <select id="practiceType">
+            <option value="resultat">Escriu el resultat</option>
+            <option value="opcions">Tria la resposta</option>
+          </select>
+        </div>
+        <div>
+          <label for="soundToggle">Ànims</label>
+          <select id="soundToggle">
+            <option value="on">Missatges activats</option>
+            <option value="off">Missatges discrets</option>
+          </select>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button class="primary" id="newExerciseBtn">Nou exercici</button>
+        </div>
+      </div>
+
+      <div class="problem">
+        <div class="operation-badge" id="opBadge">Sumes</div>
+        <div class="big-problem" id="problemText">12 + 7 = ?</div>
+        <div class="sub" id="problemHint">Pensa primer i després escriu la resposta.</div>
+
+        <div id="answerInputPanel">
+          <div class="answer-row">
+            <input class="answer" id="answerInput" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="?">
+            <button class="primary" id="checkBtn">Comprova</button>
+          </div>
+          <div class="keys">
+            <button class="key">1</button>
+            <button class="key">2</button>
+            <button class="key">3</button>
+            <button class="key">4</button>
+            <button class="key">5</button>
+            <button class="key">6</button>
+            <button class="key">7</button>
+            <button class="key">8</button>
+            <button class="key">9</button>
+            <button class="key">0</button>
+            <button class="key" id="backspaceKey">⌫</button>
+            <button class="key" id="minusKey">−</button>
+            <button class="key wide" id="clearKey">Esborra</button>
+          </div>
+        </div>
+
+        <div id="answerOptionsPanel" class="hidden">
+          <div class="actions" id="optionButtons"></div>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </div>
+
+    <div class="section lesson-grid">
+      <div class="card">
+        <div class="mini-card">
+          <h3>Com es fa</h3>
+          <div id="lessonContent"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="mini-card">
+          <h3>Exemple pas a pas</h3>
+          <div id="exampleContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section card" style="text-align:center;">
+      <button class="secondary" id="celebrateBtn" style="min-width:220px; min-height:54px; font-size:18px;">Vull una altra frase bonica</button>
+      <div class="cheer-box">
+        <div class="cheer-title">Missatge del dia</div>
+        <div class="cheer-text" id="dailyCheer">Aprendre és una aventura. Continua així!</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var state = {
+        mode: 'sumes',
+        level: 3,
+        practiceType: 'resultat',
+        sound: 'on',
+        a: 0,
+        b: 0,
+        answer: 0,
+        remainder: 0,
+        hits: 0,
+        misses: 0,
+        streak: 0
+      };
+
+      var el = {
+        modeButtons: document.querySelectorAll('.mode-btn'),
+        level: document.getElementById('level'),
+        practiceType: document.getElementById('practiceType'),
+        soundToggle: document.getElementById('soundToggle'),
+        newExerciseBtn: document.getElementById('newExerciseBtn'),
+        opBadge: document.getElementById('opBadge'),
+        problemText: document.getElementById('problemText'),
+        problemHint: document.getElementById('problemHint'),
+        answerInputPanel: document.getElementById('answerInputPanel'),
+        answerOptionsPanel: document.getElementById('answerOptionsPanel'),
+        optionButtons: document.getElementById('optionButtons'),
+        answerInput: document.getElementById('answerInput'),
+        checkBtn: document.getElementById('checkBtn'),
+        feedback: document.getElementById('feedback'),
+        lessonContent: document.getElementById('lessonContent'),
+        exampleContent: document.getElementById('exampleContent'),
+        scoreHits: document.getElementById('scoreHits'),
+        scoreMisses: document.getElementById('scoreMisses'),
+        scoreStreak: document.getElementById('scoreStreak'),
+        motivationText: document.getElementById('motivationText'),
+        dailyCheer: document.getElementById('dailyCheer'),
+        celebrateBtn: document.getElementById('celebrateBtn')
+      };
+
+      function saveProgress() {
+        try {
+          localStorage.setItem('matekids-state', JSON.stringify({
+            hits: state.hits,
+            misses: state.misses,
+            streak: state.streak,
+            mode: state.mode,
+            level: state.level,
+            practiceType: state.practiceType,
+            sound: state.sound
+          }));
+        } catch (e) {}
+      }
+
+      function loadProgress() {
+        try {
+          var raw = localStorage.getItem('matekids-state');
+          if (!raw) { return; }
+          var data = JSON.parse(raw);
+          if (data) {
+            state.hits = data.hits || 0;
+            state.misses = data.misses || 0;
+            state.streak = data.streak || 0;
+            state.mode = data.mode || 'sumes';
+            state.level = data.level || 3;
+            state.practiceType = data.practiceType || 'resultat';
+            state.sound = data.sound || 'on';
+          }
+        } catch (e) {}
+      }
+
+      function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function shuffle(arr) {
+        var i, j, tmp;
+        for (i = arr.length - 1; i > 0; i--) {
+          j = Math.floor(Math.random() * (i + 1));
+          tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+        }
+        return arr;
+      }
+
+      function rangeByLevel(level, mode) {
+        if (mode === 'sumes' || mode === 'restes') {
+          if (level === 1) { return [0, 10]; }
+          if (level === 2) { return [0, 30]; }
+          if (level === 3) { return [10, 99]; }
+          return [50, 999];
+        }
+        if (mode === 'multiplicacions') {
+          if (level === 1) { return [0, 5]; }
+          if (level === 2) { return [2, 10]; }
+          if (level === 3) { return [3, 12]; }
+          return [6, 15];
+        }
+        if (level === 1) { return [2, 5]; }
+        if (level === 2) { return [2, 9]; }
+        if (level === 3) { return [3, 12]; }
+        return [4, 15];
+      }
+
+      function generateProblem() {
+        refreshMotivation();
+        var r = rangeByLevel(state.level, state.mode);
+        var a, b, answer, remainder, text, hint;
+        remainder = 0;
+
+        if (state.mode === 'sumes') {
+          a = rand(r[0], r[1]);
+          b = rand(r[0], r[1]);
+          answer = a + b;
+          text = a + ' + ' + b + ' = ?';
+          hint = 'Pots comptar, agrupar o fer-ho mentalment.';
+        } else if (state.mode === 'restes') {
+          a = rand(r[0], r[1]);
+          b = rand(r[0], r[1]);
+          if (b > a) { var t = a; a = b; b = t; }
+          answer = a - b;
+          text = a + ' − ' + b + ' = ?';
+          hint = 'Mira quants en falten per arribar.';
+        } else if (state.mode === 'multiplicacions') {
+          a = rand(r[0], r[1]);
+          b = rand(r[0], r[1]);
+          answer = a * b;
+          text = a + ' × ' + b + ' = ?';
+          hint = 'Recorda: multiplicar és sumar grups iguals.';
+        } else {
+          b = rand(r[0], r[1]);
+          var q = rand(r[0], r[1]);
+          remainder = state.level === 1 ? 0 : rand(0, b - 1);
+          a = b * q + remainder;
+          answer = q;
+          text = a + ' ÷ ' + b + ' = ?';
+          hint = remainder ? 'Quocient: ' + a + ' ÷ ' + b + '. També hi ha residu.' : 'Troba quantes vegades hi cap.';
+        }
+
+        state.a = a;
+        state.b = b;
+        state.answer = answer;
+        state.remainder = remainder;
+
+        el.opBadge.innerHTML = modeLabel(state.mode);
+        el.problemText.innerHTML = text;
+        el.problemHint.innerHTML = hint;
+        el.answerInput.value = '';
+        el.feedback.className = 'feedback';
+        el.feedback.innerHTML = '';
+        renderLesson();
+        renderAnswerMode();
+        setTimeout(function () { try { el.answerInput.focus(); } catch (e) {} }, 50);
+      }
+
+      function modeLabel(mode) {
+        if (mode === 'sumes') { return 'Sumes'; }
+        if (mode === 'restes') { return 'Restes'; }
+        if (mode === 'multiplicacions') { return 'Multiplicacions'; }
+        return 'Divisions';
+      }
+
+      function renderStats() {
+        el.scoreHits.innerHTML = state.hits;
+        el.scoreMisses.innerHTML = state.misses;
+        el.scoreStreak.innerHTML = state.streak;
+      }
+
+      function setMode(mode) {
+        state.mode = mode;
+        for (var i = 0; i < el.modeButtons.length; i++) {
+          if (el.modeButtons[i].getAttribute('data-mode') === mode) {
+            el.modeButtons[i].className = 'mode-btn active';
+          } else {
+            el.modeButtons[i].className = 'mode-btn';
+          }
+        }
+        saveProgress();
+        generateProblem();
+      }
+
+      function renderAnswerMode() {
+        el.optionButtons.innerHTML = '';
+        if (state.practiceType === 'resultat') {
+          el.answerInputPanel.className = '';
+          el.answerOptionsPanel.className = 'hidden';
+          return;
+        }
+        el.answerInputPanel.className = 'hidden';
+        el.answerOptionsPanel.className = '';
+
+        var correct = state.answer;
+        var opts = [correct];
+        while (opts.length < 4) {
+          var delta = rand(1, 10 + state.level * 5);
+          var sign = Math.random() > 0.5 ? 1 : -1;
+          var candidate = correct + delta * sign;
+          if (state.mode !== 'restes' && candidate < 0) { candidate = Math.abs(candidate); }
+          if (opts.indexOf(candidate) === -1) { opts.push(candidate); }
+        }
+        shuffle(opts);
+        for (var i = 0; i < opts.length; i++) {
+          (function (value) {
+            var btn = document.createElement('button');
+            btn.className = 'secondary';
+            btn.style.minWidth = '110px';
+            btn.style.minHeight = '54px';
+            btn.innerHTML = String(value);
+            btn.onclick = function () { checkAnswer(value); };
+            el.optionButtons.appendChild(btn);
+          })(opts[i]);
+        }
+      }
+
+      function motivationalSet() {
+        return [
+          'Cada intent et fa més fort amb les mates.',
+          'Ho estàs fent molt bé. Continua!',
+          'Els grans aprenentatges comencen pas a pas.',
+          'Tu pots amb aquest repte!',
+          'Practicar una mica cada dia és màgic.',
+          'Els errors també ens ajuden a aprendre.',
+          'Brilles cada vegada que ho intentes.',
+          'Endavant! Estàs millorant molt.',
+          'Respira, pensa i confia en tu.',
+          'Ets capaç de coses increïbles.'
+        ];
+      }
+
+      function refreshMotivation() {
+        var messages = motivationalSet();
+        var one = messages[rand(0, messages.length - 1)];
+        var two = messages[rand(0, messages.length - 1)];
+        el.motivationText.innerHTML = one;
+        el.dailyCheer.innerHTML = two;
+      }
+
+      function animateCelebrate() {
+        var old = el.dailyCheer.innerHTML;
+        refreshMotivation();
+        el.dailyCheer.style.transform = 'scale(1.04)';
+        el.dailyCheer.style.transition = 'transform 0.18s ease';
+        setTimeout(function () {
+          el.dailyCheer.style.transform = 'scale(1)';
+        }, 180);
+      }
+
+      function correctMessage() {
+        var arr = ['Molt bé!', 'Fantàstic!', 'Genial!', 'Ho has fet súper bé!', 'Bravíssim!', 'Ets increïble!'];
+        return state.sound === 'on' ? arr[rand(0, arr.length - 1)] : 'Correcte';
+      }
+
+      function wrongMessage() {
+        var base = 'No passa res. Ho tornem a provar.';
+        if (state.mode === 'divisions' && state.remainder) {
+          base += ' El quocient és ' + state.answer + ' i el residu és ' + state.remainder + '.';
+        }
+        return state.sound === 'on' ? base : 'Torna-ho a provar';
+      }
+
+      function checkAnswer(value) {
+        var user;
+        if (typeof value === 'number') {
+          user = value;
+        } else {
+          user = parseInt(el.answerInput.value, 10);
+        }
+        if (isNaN(user)) {
+          el.feedback.className = 'feedback bad';
+          el.feedback.innerHTML = 'Escriu un número.';
+          return;
+        }
+        if (user === state.answer) {
+          state.hits += 1;
+          state.streak += 1;
+          el.feedback.className = 'feedback good';
+          el.feedback.innerHTML = correctMessage() + (state.mode === 'divisions' && state.remainder ? ' Residu: ' + state.remainder + '.' : '');
+          renderStats();
+          saveProgress();
+          if (state.streak % 5 === 0) {
+            el.dailyCheer.innerHTML = '✨ Ja portes una gran ratxa. Continua així!';
+          }
+          setTimeout(generateProblem, 900);
+        } else {
+          state.misses += 1;
+          state.streak = 0;
+          el.feedback.className = 'feedback bad';
+          el.feedback.innerHTML = wrongMessage();
+          renderStats();
+          saveProgress();
+        }
+      }
+
+      function renderLesson() {
+        var html = '';
+        var ex = '';
+        if (state.mode === 'sumes') {
+          html += '<ol class="steps">';
+          html += '<li>Ajunta dues quantitats.</li>';
+          html += '<li>Pots comptar de mica en mica o fer salts.</li>';
+          html += '<li>També pots separar desenes i unitats.</li>';
+          html += '</ol>';
+          ex += '<div class="step-chip">Exemple</div>';
+          ex += '<p><strong>' + state.a + ' + ' + state.b + '</strong></p>';
+          ex += '<p>' + state.a + ' més ' + state.b + ' fa <strong>' + state.answer + '</strong>.</p>';
+          ex += '<p>Idea: comença pel número gran i afegeix l’altre.</p>';
+        } else if (state.mode === 'restes') {
+          html += '<ol class="steps">';
+          html += '<li>Treure és restar.</li>';
+          html += '<li>Pensa quant queda després de treure.</li>';
+          html += '<li>Pots comprovar sumant el resultat amb el número petit.</li>';
+          html += '</ol>';
+          ex += '<div class="step-chip">Exemple</div>';
+          ex += '<p><strong>' + state.a + ' − ' + state.b + '</strong></p>';
+          ex += '<p>Si a ' + state.a + ' li traiem ' + state.b + ', queden <strong>' + state.answer + '</strong>.</p>';
+          ex += '<p>Comprovació: ' + state.answer + ' + ' + state.b + ' = ' + state.a + '</p>';
+        } else if (state.mode === 'multiplicacions') {
+          html += '<ol class="steps">';
+          html += '<li>Multiplicar és fer grups iguals.</li>';
+          html += '<li>Primer pensa en la taula.</li>';
+          html += '<li>Després imagina grups: ' + state.a + ' grups de ' + state.b + '.</li>';
+          html += '</ol>';
+          ex += '<div class="step-chip">Exemple</div>';
+          ex += '<p><strong>' + state.a + ' × ' + state.b + '</strong></p>';
+          ex += '<p>' + state.a + ' grups de ' + state.b + ' fan <strong>' + state.answer + '</strong>.</p>';
+          ex += '<p>És el mateix que sumar ' + state.b + ' ' + state.a + ' vegades.</p>';
+        } else {
+          html += '<ol class="steps">';
+          html += '<li>Mira quantes vegades hi cap el divisor.</li>';
+          html += '<li>Escriu el número al quocient.</li>';
+          html += '<li>Multiplica, resta i baixa la xifra següent.</li>';
+          html += '<li>Quan el número que queda és més petit que el divisor, això és el residu.</li>';
+          html += '</ol>';
+          ex += '<div class="step-chip">Quocient: ' + state.answer + '</div>';
+          if (state.remainder) { ex += '<div class="step-chip">Residu: ' + state.remainder + '</div>'; }
+          ex += '<div class="division-work"><pre>' + buildDivisionVisual(state.a, state.b) + '</pre></div>';
+          ex += '<p style="margin-top:10px">Comprovació: ' + state.b + ' × ' + state.answer + (state.remainder ? ' + ' + state.remainder : '') + ' = ' + state.a + '</p>';
+        }
+        el.lessonContent.innerHTML = html;
+        el.exampleContent.innerHTML = ex;
+      }
+
+      function buildDivisionVisual(dividend, divisor) {
+        var digits = String(dividend).split('');
+        var current = '';
+        var quotient = '';
+        var lines = [];
+        var i, q, product, remainder;
+        lines.push('  ' + dividend + ' |' + divisor);
+        lines.push('' + repeatChar('-', String(dividend).length + 2) + '+' + repeatChar('-', String(divisor).length + 1));
+        for (i = 0; i < digits.length; i++) {
+          current += digits[i];
+          q = Math.floor(parseInt(current, 10) / divisor);
+          if (quotient !== '' || q > 0) { quotient += String(q); }
+          product = q * divisor;
+          remainder = parseInt(current, 10) - product;
+          lines.push('Baixem ' + digits[i] + ' → ' + current);
+          lines.push('Cap ' + q + ' vegada/es');
+          lines.push('Multipliquem: ' + q + ' × ' + divisor + ' = ' + product);
+          lines.push('Restem: ' + current + ' − ' + product + ' = ' + remainder);
+          current = String(remainder);
+        }
+        lines.push('Quocient = ' + (quotient === '' ? '0' : quotient));
+        lines.push('Residu = ' + current);
+        return lines.join('\n');
+      }
+
+      function repeatChar(ch, n) {
+        var out = '';
+        for (var i = 0; i < n; i++) { out += ch; }
+        return out;
+      }
+
+      function bindEvents() {
+        for (var i = 0; i < el.modeButtons.length; i++) {
+          el.modeButtons[i].onclick = function () { setMode(this.getAttribute('data-mode')); };
+        }
+        el.level.onchange = function () {
+          state.level = parseInt(this.value, 10);
+          saveProgress();
+          generateProblem();
+        };
+        el.practiceType.onchange = function () {
+          state.practiceType = this.value;
+          saveProgress();
+          renderAnswerMode();
+        };
+        el.soundToggle.onchange = function () {
+          state.sound = this.value;
+          saveProgress();
+        };
+        el.newExerciseBtn.onclick = generateProblem;
+        el.celebrateBtn.onclick = animateCelebrate;
+        el.checkBtn.onclick = function () { checkAnswer(); };
+        el.answerInput.onkeydown = function (e) {
+          e = e || window.event;
+          if (e.keyCode === 13) { checkAnswer(); }
+        };
+        var keys = document.querySelectorAll('.key');
+        for (var k = 0; k < keys.length; k++) {
+          keys[k].onclick = function () {
+            var text = this.innerHTML;
+            if (text === 'Esborra') { el.answerInput.value = ''; return; }
+            if (text === '⌫') { el.answerInput.value = el.answerInput.value.slice(0, -1); return; }
+            if (text === '−') {
+              if (el.answerInput.value.indexOf('-') === 0) { el.answerInput.value = el.answerInput.value.slice(1); }
+              else { el.answerInput.value = '-' + el.answerInput.value; }
+              return;
+            }
+            el.answerInput.value += text;
+          };
+        }
+      }
+
+      function init() {
+        loadProgress();
+        el.level.value = String(state.level);
+        el.practiceType.value = state.practiceType;
+        el.soundToggle.value = state.sound;
+        bindEvents();
+        refreshMotivation();
+        renderStats();
+        setMode(state.mode);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
