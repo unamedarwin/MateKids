@@ -7,68 +7,81 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="MateKids">
   <meta name="theme-color" content="#4f46e5">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" id="manifestLink">
+  <link rel="apple-touch-icon" id="appleTouchIcon">
+  <link rel="icon" id="faviconIcon">
   <title>MateKids - Aprèn mates jugant</title>
   <style>
     :root {
-      --bg:#f7f8ff; --card:#fff; --primary:#4f46e5; --good:#0f9d58;
-      --bad:#d93025; --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb;
-      --yellow:#fff4bf; --shadow:0 10px 30px rgba(31,41,55,.08); --radius:22px;
+      --bg:#f5fbff; --card:rgba(255,255,255,.92); --primary:#ff7a59; --primary-strong:#ff5a36;
+      --secondary:#19a9b7; --accent:#ffd84d; --mint:#c4f7dc; --sky:#d9f0ff; --peach:#ffe7d6;
+      --good:#0f9d58; --bad:#d93025; --ink:#24324a; --muted:#61708b; --line:#dce7f4;
+      --yellow:#fff4bf; --shadow:0 18px 40px rgba(36,50,74,.10); --radius:26px;
     }
     * { box-sizing:border-box; }
-    html,body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; -webkit-tap-highlight-color:transparent; }
-    body { min-height:100vh; min-height:100dvh; }
-    .app { max-width:940px; margin:0 auto; padding:14px 14px 30px; padding-bottom:max(30px,env(safe-area-inset-bottom)); }
+    html,body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:"Avenir Next Rounded","Trebuchet MS","Segoe UI Rounded","Comic Sans MS",sans-serif; -webkit-tap-highlight-color:transparent; }
+    body { min-height:100vh; min-height:100dvh; position:relative; overflow-x:hidden; background:
+      radial-gradient(circle at top left, rgba(255,216,77,.45), transparent 28%),
+      radial-gradient(circle at top right, rgba(25,169,183,.22), transparent 26%),
+      linear-gradient(180deg,#fefcff 0%,#eef9ff 48%,#f5fff8 100%);
+    }
+    body:before, body:after { content:""; position:fixed; inset:auto; border-radius:999px; pointer-events:none; z-index:0; filter:blur(8px); opacity:.48; }
+    body:before { width:180px; height:180px; left:-56px; top:110px; background:rgba(255,122,89,.10); animation:floaty 7s ease-in-out infinite; }
+    body:after { width:150px; height:150px; right:-34px; top:320px; background:rgba(25,169,183,.10); animation:floaty 9s ease-in-out infinite reverse; }
+    .app { position:relative; z-index:1; max-width:940px; margin:0 auto; padding:14px 14px 34px; padding-bottom:max(34px,env(safe-area-inset-bottom)); }
+    @keyframes floaty { 0%,100% { transform:translateY(0) rotate(0deg); } 50% { transform:translateY(-14px) rotate(4deg); } }
+    @keyframes pop-in { from { opacity:0; transform:translateY(12px) scale(.98); } to { opacity:1; transform:translateY(0) scale(1); } }
 
     /* Hero */
-    .hero { background:linear-gradient(135deg,#6366f1,#8b5cf6 60%,#ec4899); color:#fff; border-radius:30px; padding:20px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
-    .hero:before,.hero:after { content:""; position:absolute; border-radius:999px; background:rgba(255,255,255,.12); }
-    .hero:before { width:140px; height:140px; right:-30px; top:-20px; }
-    .hero:after { width:90px; height:90px; left:-20px; bottom:-20px; }
+    .hero { background:linear-gradient(135deg,#ff8b6a,#ff7d92 44%,#6e87f7 100%); color:#fff; border-radius:34px; padding:20px; box-shadow:var(--shadow); position:relative; overflow:hidden; animation:pop-in .45s ease-out; }
+    .hero:before,.hero:after { content:""; position:absolute; border-radius:999px; background:rgba(255,255,255,.14); }
+    .hero:before { width:170px; height:170px; right:-36px; top:-28px; }
+    .hero:after { width:112px; height:112px; left:-18px; bottom:-24px; }
     .hero-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
     .hero-brand { display:flex; align-items:center; gap:12px; }
-    .hero-mascot { width:56px; height:56px; border-radius:18px; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:32px; }
+    .hero-mascot { width:64px; height:64px; border-radius:22px; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:36px; box-shadow:inset 0 0 0 2px rgba(255,255,255,.16); animation:floaty 4.6s ease-in-out infinite; }
     .hero h1 { margin:0 0 8px; font-size:32px; line-height:1.1; }
-    .hero p { margin:0; font-size:16px; line-height:1.4; font-weight:600; }
+    .hero p { margin:0; font-size:16px; line-height:1.4; font-weight:700; max-width:32ch; }
     .mini-tabs { display:flex; gap:8px; flex-wrap:wrap; }
-    .mini-tab { padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.18); font-size:13px; font-weight:800; }
+    .mini-tab { padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.18); font-size:13px; font-weight:900; letter-spacing:.2px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.12); }
     .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
-    .stat { background:rgba(255,255,255,.18); border-radius:20px; padding:12px; text-align:center; }
+    .stat { background:rgba(255,255,255,.18); border-radius:22px; padding:12px; text-align:center; box-shadow:inset 0 0 0 1px rgba(255,255,255,.12); }
     .stat strong { display:block; font-size:22px; }
     .reward-strip { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
-    .reward-pill { border-radius:999px; padding:10px 12px; background:rgba(255,255,255,.2); font-size:14px; font-weight:800; }
+    .reward-pill { border-radius:999px; padding:10px 12px; background:rgba(255,255,255,.2); font-size:14px; font-weight:900; box-shadow:inset 0 0 0 1px rgba(255,255,255,.12); }
 
     /* Sections */
-    .section { margin-top:16px; }
-    .card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; }
+    .section { margin-top:14px; }
+    .card { background:var(--card); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.55); border-radius:var(--radius); box-shadow:var(--shadow); padding:15px; animation:pop-in .45s ease-out; }
     .journey-grid { display:grid; gap:14px; }
     @media (min-width:840px) { .journey-grid { grid-template-columns:1fr 1fr 1fr; } }
-    .journey-card { background:linear-gradient(180deg,#fff,#f8fafc); border-radius:22px; padding:16px; border:1px solid #e5e7eb; text-align:center; box-shadow:var(--shadow); }
-    .journey-icon { width:60px; height:60px; margin:0 auto 10px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:30px; background:linear-gradient(135deg,#ede9fe,#ecfeff); }
+    .journey-card { background:linear-gradient(180deg,#fffdf6,#f8fbff); border-radius:24px; padding:16px; border:1px solid #e5e7eb; text-align:center; box-shadow:var(--shadow); transform-origin:center; transition:transform .18s ease, box-shadow .18s ease; }
+    .journey-card:hover { transform:translateY(-3px) rotate(-1deg); box-shadow:0 20px 36px rgba(36,50,74,.12); }
+    .journey-icon { width:60px; height:60px; margin:0 auto 10px; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:30px; background:linear-gradient(135deg,#fff0b8,#d7fbff); }
     .journey-card h3 { margin:0 0 6px; font-size:18px; }
     .journey-card p { margin:0; color:var(--muted); font-size:14px; line-height:1.4; font-weight:600; }
 
     /* Adventure */
-    .adventure-card { background:linear-gradient(180deg,#fff,#f8fafc); border-radius:24px; padding:16px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
+    .adventure-card { background:linear-gradient(180deg,#fffdf6,#f8fbff); border-radius:26px; padding:16px; border:1px solid #e5e7eb; box-shadow:var(--shadow); position:relative; overflow:hidden; }
     .adventure-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
     .adventure-title { font-size:22px; font-weight:900; margin:0; }
     .adventure-sub { margin:4px 0 0; color:var(--muted); font-weight:600; font-size:14px; }
     .adventure-badges { display:flex; gap:8px; flex-wrap:wrap; }
-    .adventure-badge { border-radius:999px; padding:8px 12px; background:#eef2ff; color:var(--primary); font-size:13px; font-weight:800; }
-    .adventure-canvas-wrap { background:linear-gradient(180deg,#eff6ff,#f0fdf4); border-radius:20px; padding:10px; border:1px solid #dbeafe; }
+    .adventure-badge { border-radius:999px; padding:8px 12px; background:#fff3d8; color:#8f4600; font-size:13px; font-weight:900; }
+    .adventure-canvas-wrap { background:linear-gradient(180deg,#eff6ff,#f0fdf4); border-radius:22px; padding:10px; border:1px solid #dbeafe; }
     .adventure-canvas { width:100%; height:210px; display:block; border-radius:14px; background:linear-gradient(180deg,#dbeafe,#ecfccb); }
 
     /* Welcome & Mode */
-    .welcome-banner { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; padding:16px 18px; border-radius:24px; background:linear-gradient(135deg,#fdf2f8,#eef2ff 55%,#ecfeff); border:1px solid #e9d5ff; flex-wrap:wrap; }
+    .welcome-banner { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; padding:18px 20px; border-radius:28px; background:linear-gradient(135deg,#fff5cf,#ffe6eb 38%,#e1f7ff 100%); border:1px solid #ffe1b5; flex-wrap:wrap; }
     .welcome-kicker { display:inline-block; margin-bottom:6px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.85); color:var(--primary); font-size:12px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; }
     .welcome-banner h2 { margin:0 0 6px; font-size:24px; line-height:1.15; }
     .welcome-banner p { margin:0; color:#4b5563; font-size:16px; line-height:1.35; font-weight:600; }
     .welcome-stars { font-size:34px; white-space:nowrap; }
     .grid-4 { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
     @media (min-width:720px) { .grid-4 { grid-template-columns:repeat(4,1fr); } }
-    .mode-btn { border:0; border-radius:24px; padding:16px 10px; background:linear-gradient(180deg,#f8fafc,#eef2ff); color:var(--ink); width:100%; font-size:18px; font-weight:800; min-height:104px; box-shadow:0 8px 20px rgba(99,102,241,.1), inset 0 0 0 2px transparent; cursor:pointer; transition:box-shadow .15s,background .15s; }
-    .mode-btn.active { background:linear-gradient(180deg,#e0e7ff,#ede9fe); box-shadow:0 10px 24px rgba(79,70,229,.18), inset 0 0 0 2px var(--primary); }
+    .mode-btn { border:0; border-radius:28px; padding:16px 10px; background:linear-gradient(180deg,#fffef8,#edf8ff); color:var(--ink); width:100%; font-size:18px; font-weight:900; min-height:104px; box-shadow:0 14px 28px rgba(36,50,74,.08), inset 0 0 0 2px transparent; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, background .15s ease; }
+    .mode-btn:hover { transform:translateY(-2px); }
+    .mode-btn.active { background:linear-gradient(180deg,#ffe8ce,#ffeef4 55%,#dcf6ff); box-shadow:0 14px 28px rgba(255,122,89,.18), inset 0 0 0 2px var(--primary); }
     .mode-emoji { display:block; font-size:28px; margin-bottom:6px; }
 
     /* Toolbar */
@@ -76,13 +89,86 @@
     @media (min-width:700px) { .toolbar { grid-template-columns:1.2fr 1fr 1fr 1fr; } }
     label { font-size:13px; color:var(--muted); display:block; margin-bottom:6px; font-weight:700; }
     select,input[type="number"] { width:100%; border-radius:16px; border:2px solid var(--line); padding:12px 14px; font-size:17px; background:#fff; -webkit-appearance:none; }
+    .field-note { margin-top:6px; min-height:32px; font-size:12px; line-height:1.35; color:var(--muted); font-weight:600; }
 
     /* Buttons */
-    .primary,.secondary,.ghost { border:0; border-radius:18px; padding:13px 16px; font-size:17px; font-weight:700; cursor:pointer; transition:opacity .15s; }
-    .primary:active,.secondary:active,.ghost:active { opacity:.7; }
-    .primary { background:var(--primary); color:#fff; }
-    .secondary { background:#eef2ff; color:var(--primary); }
-    .ghost { background:#f3f4f6; color:var(--ink); }
+    .primary,.secondary,.ghost { border:0; border-radius:20px; padding:13px 16px; font-size:17px; font-weight:800; cursor:pointer; transition:transform .12s ease, opacity .15s, box-shadow .15s ease; }
+    .primary:active,.secondary:active,.ghost:active { opacity:.8; transform:translateY(1px) scale(.98); }
+    .primary { background:linear-gradient(135deg,var(--primary),var(--primary-strong)); color:#fff; box-shadow:0 10px 18px rgba(255,122,89,.28); }
+    .secondary { background:linear-gradient(135deg,#eefbff,#dff5ff); color:#176c82; box-shadow:0 10px 18px rgba(25,169,183,.14); }
+    .ghost { background:linear-gradient(135deg,#fff9e7,#f3f4f6); color:var(--ink); box-shadow:0 8px 16px rgba(36,50,74,.08); }
+
+    /* Install card */
+    .install-card { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:16px 18px; border-radius:24px; background:linear-gradient(135deg,#fff7d9,#fef3ff 48%,#ddf8ff); border:1px solid #ffe09a; box-shadow:var(--shadow); flex-wrap:wrap; }
+    .install-badge { display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.8); color:#9a4b00; font-size:12px; font-weight:900; letter-spacing:.3px; text-transform:uppercase; }
+    .install-card h3 { margin:8px 0 4px; font-size:22px; }
+    .install-card p { margin:0; color:#5f4a3c; font-weight:700; line-height:1.4; }
+    .install-actions { display:flex; flex-direction:column; gap:10px; flex-wrap:wrap; align-items:flex-start; }
+    .install-status { font-size:13px; color:var(--muted); font-weight:700; max-width:28ch; }
+    @media (max-width:720px) { .install-actions { width:100%; } .install-actions .primary { width:100%; } .install-status { max-width:none; } }
+
+    @media (max-width:900px) {
+      body { background:linear-gradient(180deg,#fbfdff 0%,#eef7ff 62%,#f8fff8 100%); }
+      body:before, body:after, .hero:before, .hero:after { display:none; }
+      .app { max-width:760px; padding:10px 10px 18px; padding-bottom:max(18px,env(safe-area-inset-bottom)); }
+      .section { margin-top:10px; }
+      .hero { border-radius:24px; padding:14px 16px; }
+      .hero-top { gap:8px; }
+      .hero-mascot { width:48px; height:48px; font-size:28px; border-radius:16px; box-shadow:none; }
+      .hero h1 { margin:0 0 2px; font-size:28px; }
+      .hero p, .mini-tabs, .reward-strip { display:none; }
+      .stats { display:none; }
+      .stat { padding:8px 6px; border-radius:16px; font-size:12px; }
+      .stat strong { font-size:18px; }
+      .compact-optional { display:none !important; }
+      .welcome-banner { display:none !important; }
+      .card { border-radius:20px; padding:12px; box-shadow:0 12px 24px rgba(36,50,74,.08); }
+      .grid-4 { gap:8px; }
+      .mode-btn { min-height:76px; border-radius:20px; padding:12px 8px; font-size:16px; box-shadow:0 10px 18px rgba(36,50,74,.07), inset 0 0 0 2px transparent; }
+      .mode-emoji { font-size:22px; margin-bottom:4px; }
+      .toolbar { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:10px; }
+      .toolbar > div:last-child { grid-column:1 / -1; }
+      .toolbar-optional { display:none; }
+      .field-note { display:none; }
+      .problem { padding-top:2px; }
+      .operation-badge { padding:6px 10px; font-size:13px; }
+      .big-problem { font-size:32px; margin:8px 0 6px; letter-spacing:.2px; }
+      .sub { display:none; }
+      .answer-row { gap:8px; margin:10px 0 6px; }
+      .answer { width:132px; font-size:24px; padding:10px; border-radius:18px; }
+      .primary,.secondary,.ghost { border-radius:16px; padding:11px 14px; font-size:15px; }
+      .keys { gap:6px; margin-top:10px; }
+      .key { font-size:22px; padding:12px 0; border-radius:16px; }
+      .innova-op { gap:8px; margin-top:10px; }
+      .innova-row { gap:12px; }
+      .innova-sign { width:24px; font-size:24px; }
+      .innova-box { min-width:72px; padding:8px 14px; border-radius:16px; font-size:28px; }
+      .innova-tally { display:none !important; }
+      .paper-op { margin-top:10px; max-width:100%; padding:12px; border-radius:18px; box-shadow:0 12px 20px rgba(36,50,74,.08); }
+      .paper-topline { gap:8px; margin-bottom:8px; }
+      .paper-help { min-width:0; font-size:12px; }
+      .paper-grid { gap:4px 5px; }
+      .paper-sign { width:24px; font-size:22px; }
+      .paper-cell { width:36px; height:42px; border-radius:10px; font-size:24px; }
+      .paper-cell.note { width:28px; height:24px; border-radius:8px; font-size:14px; }
+      .paper-answer-label { margin-top:8px; font-size:12px; }
+      .division-trainer { padding:12px; border-radius:18px; margin-top:10px; }
+      .division-head h3 { font-size:18px; }
+      .division-head p { font-size:13px; }
+      .pointer-chip { padding:6px 10px; font-size:12px; }
+      .division-board { margin-top:10px; padding:12px; border-radius:16px; }
+      .division-layout { min-width:0; font-size:22px; }
+      .division-left { min-width:62px; padding-right:8px; }
+      .division-right { min-width:48px; padding-left:8px; }
+      .quot-slot { width:30px; height:34px; font-size:22px; }
+      .div-dividend { font-size:22px; }
+      .div-work-line { font-size:18px; min-height:28px; }
+      .div-field-slot { min-width:28px; height:30px; font-size:18px; }
+      .division-actions { grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+      .division-actions > div:first-child,
+      .division-actions > .primary { grid-column:1 / -1; }
+      .division-help, .feedback { font-size:14px; }
+    }
 
     /* Problem */
     .problem { text-align:center; padding:8px 0 0; }
@@ -90,9 +176,31 @@
     .big-problem { font-size:46px; font-weight:900; letter-spacing:1px; margin:12px 0 10px; }
     .sub { color:var(--muted); font-size:16px; margin-top:-2px; font-weight:600; }
     .answer-row { display:flex; gap:10px; justify-content:center; align-items:center; margin:16px 0 8px; flex-wrap:wrap; }
-    .answer { width:180px; max-width:100%; text-align:center; font-size:30px; font-weight:900; border-radius:20px; border:3px solid #d1d5db; padding:12px; box-shadow:inset 0 2px 8px rgba(15,23,42,.04); }
+    .answer { width:180px; max-width:100%; text-align:center; font-size:30px; font-weight:900; border-radius:22px; border:3px solid #ffd384; padding:12px; background:linear-gradient(180deg,#fffdf8,#fff3db); color:#9a4b00; box-shadow:0 12px 20px rgba(255,216,77,.18), inset 0 2px 8px rgba(15,23,42,.04); }
     .feedback { min-height:28px; text-align:center; font-size:18px; font-weight:700; margin-top:10px; }
     .good { color:var(--good); } .bad { color:var(--bad); }
+    .paper-op { margin:14px auto 0; max-width:430px; padding:16px 18px; border-radius:26px; background:linear-gradient(180deg,#fffdf7,#fff8ef); border:1px solid #ffe4b8; box-shadow:0 16px 28px rgba(36,50,74,.10); }
+    .paper-topline { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+    .paper-kicker { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:#fff0c9; color:#9a4b00; font-size:12px; font-weight:900; text-transform:uppercase; }
+    .paper-help { color:var(--muted); font-size:13px; font-weight:700; text-align:left; flex:1; min-width:200px; }
+    .paper-grid { display:grid; gap:6px 8px; justify-content:center; align-items:end; margin:0 auto; }
+    .paper-sign { width:34px; text-align:center; font-size:30px; font-weight:900; color:var(--primary); line-height:1; }
+    .paper-cell { width:46px; height:52px; border-radius:14px; background:#fff; border:2px solid #d8e3f3; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:900; color:#24324a; box-shadow:inset 0 2px 8px rgba(36,50,74,.04); }
+    .paper-cell.empty { color:#cbd5e1; border-style:dashed; }
+    .paper-cell.answer { background:linear-gradient(180deg,#fffdf8,#fff4dc); border-color:#ffcf77; color:#9a4b00; min-height:58px; }
+    .paper-cell.answer.correct { background:#dcfce7; border-color:#22c55e; color:#166534; }
+    .paper-cell.answer.wrong { background:#fef2f2; border-color:#ef4444; color:#b91c1c; }
+    .paper-cell.note { width:36px; height:30px; border-radius:10px; font-size:18px; background:#f8fbff; color:#56657d; cursor:pointer; border-style:dashed; }
+    .paper-cell.note.active { border-style:solid; border-color:var(--primary); box-shadow:0 0 0 4px rgba(255,122,89,.14); background:#fff2ea; color:var(--primary-strong); }
+    .paper-cell.note.filled { border-style:solid; color:#42506a; }
+    .paper-cell.partial { background:linear-gradient(180deg,#fff,#eef8ff); border-color:#9fd0ff; color:#155e75; }
+    .paper-cell.partial.active,
+    .paper-cell.answer.active { border-style:solid; border-color:var(--primary); box-shadow:0 0 0 4px rgba(255,122,89,.14); background:#fff2ea; color:#9a4b00; }
+    .paper-cell.blocked { background:transparent; border-color:transparent; box-shadow:none; }
+    .paper-mini-label { font-size:12px; font-weight:900; color:#7c5c24; text-align:center; }
+    .paper-row-divider { grid-column:2 / -1; height:3px; background:#98a2b3; border-radius:999px; margin:0 0 2px; opacity:.8; }
+    .paper-line { grid-column:2 / -1; height:4px; background:#2f3a4f; border-radius:999px; margin:2px 0 4px; }
+    .paper-answer-label { margin-top:10px; color:var(--muted); font-size:13px; font-weight:800; }
 
     /* Lesson */
     .lesson-grid { display:grid; gap:14px; }
@@ -104,8 +212,8 @@
 
     /* Numeric keypad */
     .keys { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
-    .key { font-size:24px; font-weight:700; border:0; border-radius:18px; padding:16px 0; background:#f3f4f6; cursor:pointer; transition:background .1s; }
-    .key:active { background:#dbeafe; }
+    .key { font-size:24px; font-weight:800; border:0; border-radius:20px; padding:16px 0; background:linear-gradient(180deg,#ffffff,#eef4fb); color:#364256; cursor:pointer; box-shadow:0 10px 18px rgba(36,50,74,.08); transition:background .1s, transform .1s; }
+    .key:active { background:#dbeafe; transform:scale(.98); }
     .key.wide { grid-column:span 3; }
     .step-chip { display:inline-block; background:#eef2ff; color:var(--primary); padding:7px 10px; border-radius:999px; margin:0 6px 6px 0; font-size:13px; font-weight:700; }
 
@@ -209,8 +317,13 @@
     #darkToggle:active { opacity:.7; }
 
     /* ── Dark mode ── */
-    body.dark { --bg:#0d0d1a; --card:#16162a; --ink:#e5e7eb; --muted:#9ca3af; --line:#2d2d46; --yellow:#2c1e00; --shadow:0 10px 30px rgba(0,0,0,.55); }
-    body.dark { background:var(--bg); color:var(--ink); }
+    body.dark { --bg:#0d1426; --card:rgba(21,29,53,.92); --ink:#e5eefc; --muted:#a9bad7; --line:#2b385f; --yellow:#3b2a03; --shadow:0 14px 36px rgba(0,0,0,.42); }
+    body.dark { background:
+      radial-gradient(circle at top left, rgba(255,122,89,.16), transparent 24%),
+      radial-gradient(circle at top right, rgba(90,137,255,.18), transparent 22%),
+      linear-gradient(180deg,#0d1426 0%,#101933 50%,#0b1d24 100%);
+      color:var(--ink);
+    }
     body.dark .journey-card { background:linear-gradient(180deg,#1e1e36,#141428); border-color:#2d2d46; color:#e5e7eb; }
     body.dark .journey-card p { color:#9ca3af; }
     body.dark .adventure-card { background:linear-gradient(180deg,#1e1e36,#141428); border-color:#2d2d46; }
@@ -248,11 +361,15 @@
     body.dark .cheer-box { background:linear-gradient(135deg,#091820,#16162a); border-color:#3730a3; }
     body.dark .cheer-title { color:#a5b4fc; }
     body.dark .cheer-text { color:#e5e7eb; }
+    body.dark .install-card { background:linear-gradient(135deg,#211d0d,#2a1830 48%,#0d2330); border-color:#5b4b19; }
+    body.dark .install-badge { background:rgba(255,255,255,.08); color:#ffd76f; }
+    body.dark .install-card p, body.dark .install-status { color:#d2d9ea; }
     body.dark .division-process-ok { background:#0a1e12; color:#4ade80; }
     body.dark .division-process-bad { background:#280e0e; color:#f87171; }
     body.dark .pointer-chip, body.dark .adventure-badge, body.dark .step-chip { background:#1a1a30; color:#a5b4fc; }
     body.dark .division-help { color:#9ca3af; }
     body.dark label { color:#9ca3af; }
+    body.dark .field-note { color:#9ca3af; }
   </style>
 </head>
 <body>
@@ -277,13 +394,25 @@
       </div>
     </div>
 
-    <div class="section journey-grid">
+    <div class="section install-card compact-optional" id="installCard">
+      <div>
+        <div class="install-badge">Mini app màgica</div>
+        <h3>Posa MateKids a la pantalla d'inici</h3>
+        <p>Obre-la com si fos una app i continua jugant amb un toc ràpid.</p>
+      </div>
+      <div class="install-actions">
+        <button class="primary" id="installBtn" type="button">Instal·la</button>
+        <div class="install-status" id="installHint">Si el teu dispositiu no deixa instal·lar-la automàticament, la pots afegir des del menú del navegador.</div>
+      </div>
+    </div>
+
+    <div class="section journey-grid compact-optional">
       <div class="journey-card"><div class="journey-icon">🎯</div><h3>Repte del moment</h3><p>Posa a prova el teu enginy i continua avançant pas a pas.</p></div>
       <div class="journey-card"><div class="journey-icon">🏆</div><h3>Guanya estrelles</h3><p>Cada resposta bona t'acosta a noves fites i més confiança.</p></div>
       <div class="journey-card"><div class="journey-icon">🚀</div><h3>Segueix millorant</h3><p>Practica una mica cada dia i veuràs com avances molt.</p></div>
     </div>
 
-    <div class="section adventure-card">
+    <div class="section adventure-card compact-optional">
       <div class="adventure-top">
         <div><h3 class="adventure-title">Camí de l'aventura</h3><p class="adventure-sub">Cada resposta bona fa avançar el personatge fins al tresor.</p></div>
         <div class="adventure-badges"><div class="adventure-badge">📍 Punt <span id="adventureBadgeStep">1</span>/10</div><div class="adventure-badge">🏁 Meta final</div></div>
@@ -307,8 +436,8 @@
     <div class="section card">
       <div class="toolbar">
         <div><label for="level">Nivell</label><select id="level"><option value="1">1 - Molt fàcil</option><option value="2">2 - Fàcil</option><option value="3" selected>3 - Mitjà</option><option value="4">4 - Avançat</option></select></div>
-        <div><label for="practiceType">Tipus</label><select id="practiceType"><option value="resultat">Escriu el resultat</option><option value="opcions">Tria la resposta</option></select></div>
-        <div><label for="soundToggle">Ànims</label><select id="soundToggle"><option value="on">Missatges activats</option><option value="off">Missatges discrets</option></select></div>
+        <div><label id="practiceTypeLabel" for="practiceType">Tipus</label><select id="practiceType"><option value="resultat">Escriu el resultat</option><option value="opcions">Tria la resposta</option><option value="manual">Paper i llapis</option></select><div class="field-note" id="practiceTypeNote">Tria si vols escriure o tocar la resposta.</div></div>
+        <div class="toolbar-optional"><label for="soundToggle">Ànims</label><select id="soundToggle"><option value="on">Missatges activats</option><option value="off">Missatges discrets</option></select></div>
         <div><label>&nbsp;</label><button class="primary" id="newExerciseBtn">Nou exercici</button></div>
       </div>
 
@@ -367,12 +496,12 @@
       </div>
     </div>
 
-    <div class="section lesson-grid">
+    <div class="section lesson-grid compact-optional">
       <div class="card"><div class="mini-card"><h3>Com es fa</h3><div id="lessonContent"></div></div></div>
       <div class="card"><div class="mini-card"><h3>Ajuda</h3><div id="exampleContent"></div></div></div>
     </div>
 
-    <div class="section card" style="text-align:center;">
+    <div class="section card compact-optional" style="text-align:center;">
       <button class="secondary" id="celebrateBtn" style="min-width:220px;min-height:54px;font-size:18px;">Vull una altra frase bonica</button>
       <div class="cheer-box">
         <div class="cheer-title">Missatge del dia</div>
@@ -392,7 +521,13 @@
       hits: 0, misses: 0, streak: 0, stars: 0, medals: 0, adventureStep: 0,
       divisionFlow: [], divisionFieldOrder: [], divisionEntries: {},
       divisionPointer: 0, divisionChecked: false,
-      vop: null
+      vop: null,
+      paperNotes: [],
+      paperPartials: [],
+      paperAnswerDigits: [],
+      paperFocusKind: '',
+      paperFocusIndex: -1,
+      paperFocusRow: -1
     };
 
     /* ── DOM refs ── */
@@ -400,6 +535,8 @@
       modeButtons: document.querySelectorAll('.mode-btn'),
       level: document.getElementById('level'),
       practiceType: document.getElementById('practiceType'),
+      practiceTypeLabel: document.getElementById('practiceTypeLabel'),
+      practiceTypeNote: document.getElementById('practiceTypeNote'),
       soundToggle: document.getElementById('soundToggle'),
       newExerciseBtn: document.getElementById('newExerciseBtn'),
       opBadge: document.getElementById('opBadge'),
@@ -426,6 +563,12 @@
       motivationText: document.getElementById('motivationText'),
       dailyCheer: document.getElementById('dailyCheer'),
       celebrateBtn: document.getElementById('celebrateBtn'),
+      installCard: document.getElementById('installCard'),
+      installBtn: document.getElementById('installBtn'),
+      installHint: document.getElementById('installHint'),
+      manifestLink: document.getElementById('manifestLink'),
+      appleTouchIcon: document.getElementById('appleTouchIcon'),
+      faviconIcon: document.getElementById('faviconIcon'),
       divisionTrainer: document.getElementById('divisionTrainer'),
       divisionBoard: document.getElementById('divisionBoard'),
       divisionPointerText: document.getElementById('divisionPointerText'),
@@ -436,6 +579,258 @@
       divisionHelp: document.getElementById('divisionHelp'),
       divisionValidationBox: document.getElementById('divisionValidationBox')
     };
+    var deferredInstallPrompt = null;
+
+    function updatePracticeTypeUI() {
+      var note = 'Tria si vols escriure o tocar la resposta.';
+      el.practiceType.disabled = false;
+
+      if (state.mode === 'divisions') {
+        state.practiceType = 'resultat';
+        el.practiceType.value = 'resultat';
+        el.practiceType.disabled = true;
+        note = 'Les divisions es fan sempre pas a pas per entendre el procés.';
+      } else if (state.practiceType === 'manual') {
+        note = state.mode === 'multiplicacions'
+          ? 'Mode paper i llapis: fes servir les caselles petites de dalt per apuntar les que et portes mentre multipliques.'
+          : 'Mode paper i llapis: fes servir les caselles petites de dalt per apuntar el que et portes o el préstec.';
+      } else if (state.practiceType === 'opcions') {
+        note = 'Tria l\'opció correcta entre les respostes disponibles.';
+      } else if (state.mode === 'sumes') {
+        note = 'Escriu directament el resultat de la suma. El dibuix et pot ajudar a pensar.';
+      } else if (state.mode === 'restes') {
+        note = 'Escriu directament el resultat de la resta. La representació visual et serveix de pista.';
+      } else if (state.mode === 'multiplicacions') {
+        note = 'Escriu el resultat o mira la representació visual per ajudar-te.';
+      }
+
+      el.practiceTypeNote.textContent = note;
+      el.practiceType.style.opacity = el.practiceType.disabled ? '.65' : '1';
+    }
+
+    function usesPaperAlgorithm() {
+      return state.practiceType === 'manual' && (state.mode === 'sumes' || state.mode === 'restes' || state.mode === 'multiplicacions');
+    }
+
+    function paperColumnCount() {
+      return Math.max(String(state.a).length, String(state.b).length, String(state.answer).length, state.mode === 'multiplicacions' ? String(state.a * state.b).length : 0, 2);
+    }
+
+    function paperPartialRowCount() {
+      return state.mode === 'multiplicacions' ? String(state.b).length : 0;
+    }
+
+    function resetPaperWorkspace() {
+      state.paperNotes = [];
+      state.paperPartials = [];
+      state.paperAnswerDigits = [];
+      state.paperFocusKind = '';
+      state.paperFocusIndex = -1;
+      state.paperFocusRow = -1;
+    }
+
+    function ensurePaperNotes() {
+      var cols = paperColumnCount();
+      if (!state.paperNotes || state.paperNotes.length !== cols) {
+        state.paperNotes = new Array(cols).fill('');
+      }
+    }
+
+    function ensurePaperPartials() {
+      var rows = paperPartialRowCount();
+      if (!rows) {
+        state.paperPartials = [];
+        return;
+      }
+      if (!state.paperPartials || state.paperPartials.length !== rows) {
+        state.paperPartials = new Array(rows).fill('');
+      }
+    }
+
+    function sanitizeDigits(text) {
+      return String(text || '').replace(/\D/g, '');
+    }
+
+    function alignDigits(text, cols) {
+      var cleaned = sanitizeDigits(text);
+      if (cleaned.length > cols) cleaned = cleaned.slice(-cols);
+      var list = new Array(cols).fill('');
+      var offset = cols - cleaned.length;
+      for (var i = 0; i < cleaned.length; i++) list[offset + i] = cleaned.charAt(i);
+      return list;
+    }
+
+    function serializePaperCells(cells) {
+      return cells.join('');
+    }
+
+    function noteValue(index) {
+      ensurePaperNotes();
+      return state.paperNotes[index] || '';
+    }
+
+    function partialValue(row) {
+      ensurePaperPartials();
+      return state.paperPartials[row] || '';
+    }
+
+    function syncPaperAnswerFromInput() {
+      if (!usesPaperAlgorithm()) return;
+      state.paperAnswerDigits = alignDigits(el.answerInput.value, paperColumnCount());
+    }
+
+    function syncAnswerInputFromPaper() {
+      el.answerInput.value = serializePaperCells(state.paperAnswerDigits || []);
+    }
+
+    function setPaperFocus(kind, index, row) {
+      state.paperFocusKind = kind || '';
+      state.paperFocusIndex = typeof index === 'number' ? index : -1;
+      state.paperFocusRow = typeof row === 'number' ? row : -1;
+      if (kind !== 'note' && kind !== 'partial') {
+        try { el.answerInput.focus(); } catch (e) {}
+      }
+      renderVerticalOp('pending');
+    }
+
+    function writeIntoAlignedDigits(currentText, width, targetIndex, text) {
+      var cells = alignDigits(currentText, width);
+      if (targetIndex < 0 || targetIndex >= width) return currentText;
+      if (text === 'Esborra') {
+        for (var i = 0; i < width; i++) cells[i] = '';
+      } else if (text === '⌫' || text === 'âŒ«' || text === 'Backspace' || text === 'Delete') {
+        cells[targetIndex] = '';
+      } else if (/^\d$/.test(text)) {
+        cells[targetIndex] = text;
+      }
+      return serializePaperCells(cells);
+    }
+
+    function movePaperFocusLeft() {
+      if (state.paperFocusIndex > 0) state.paperFocusIndex -= 1;
+    }
+
+    function handlePaperWorkspaceInput(text) {
+      if (!usesPaperAlgorithm() || state.paperFocusIndex < 0) return false;
+      if (text === 'Escape') {
+        state.paperFocusKind = '';
+        state.paperFocusIndex = -1;
+        state.paperFocusRow = -1;
+        renderVerticalOp('pending');
+        return true;
+      }
+      if (state.paperFocusKind === 'note') {
+        ensurePaperNotes();
+        if (text === 'Esborra' || text === '⌫' || text === 'âŒ«' || text === 'Backspace' || text === 'Delete') {
+          state.paperNotes[state.paperFocusIndex] = '';
+        } else if (/^\d$/.test(text)) {
+          state.paperNotes[state.paperFocusIndex] = text;
+          movePaperFocusLeft();
+        } else {
+          return false;
+        }
+        renderVerticalOp('pending');
+        return true;
+      }
+      if (state.paperFocusKind === 'answer') {
+        syncPaperAnswerFromInput();
+        state.paperAnswerDigits = alignDigits(writeIntoAlignedDigits(el.answerInput.value, paperColumnCount(), state.paperFocusIndex, text), paperColumnCount());
+        syncAnswerInputFromPaper();
+        if (/^\d$/.test(text)) movePaperFocusLeft();
+        renderVerticalOp('pending');
+        return true;
+      }
+      if (state.paperFocusKind === 'partial' && state.paperFocusRow >= 0) {
+        ensurePaperPartials();
+        var shift = state.paperFocusRow;
+        var width = Math.max(paperColumnCount() - shift, 1);
+        if (state.paperFocusIndex >= width) return true;
+        state.paperPartials[state.paperFocusRow] = writeIntoAlignedDigits(partialValue(state.paperFocusRow), width, state.paperFocusIndex, text);
+        if (/^\d$/.test(text)) movePaperFocusLeft();
+        renderVerticalOp('pending');
+        return true;
+      }
+      return false;
+    }
+
+    function handlePaperNoteInput(text) {
+      if (!usesPaperAlgorithm() || state.paperFocusKind !== 'note' || state.paperFocusIndex < 0) return false;
+      ensurePaperNotes();
+      var idx = state.paperFocusIndex;
+      if (text === 'Esborra' || text === '⌫' || text === 'âŒ«' || text === 'Backspace' || text === 'Delete') {
+        state.paperNotes[idx] = '';
+        renderVerticalOp('pending');
+        return true;
+      }
+      if (text === 'Escape') {
+        state.paperFocusKind = '';
+        state.paperFocusIndex = -1;
+        renderVerticalOp('pending');
+        return true;
+      }
+      if (/^\d$/.test(text)) {
+        state.paperNotes[idx] = text;
+        if (idx > 0) state.paperFocusIndex = idx - 1;
+        renderVerticalOp('pending');
+        return true;
+      }
+      return false;
+    }
+
+    function svgDataUrl(svg) {
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    function buildAppIconSvg(size) {
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="' + size + '" height="' + size + '">' +
+        '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff8f70"/><stop offset="55%" stop-color="#ff6a88"/><stop offset="100%" stop-color="#7a7cff"/></linearGradient></defs>' +
+        '<rect width="192" height="192" rx="46" fill="url(#g)"/>' +
+        '<circle cx="50" cy="46" r="14" fill="rgba(255,255,255,.18)"/>' +
+        '<circle cx="150" cy="152" r="18" fill="rgba(255,255,255,.16)"/>' +
+        '<text x="96" y="108" text-anchor="middle" font-size="76">🦊</text>' +
+        '<text x="146" y="58" text-anchor="middle" font-size="28">✨</text>' +
+        '</svg>';
+    }
+
+    function registerDynamicPwaAssets() {
+      var iconUrl = svgDataUrl(buildAppIconSvg(192));
+      var manifest = {
+        name: 'MateKids',
+        short_name: 'MateKids',
+        description: 'Practica mates jugant amb una app amable i visual.',
+        start_url: './',
+        display: 'standalone',
+        background_color: '#f5fbff',
+        theme_color: '#ff7a59',
+        icons: [
+          { src: iconUrl, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+          { src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+        ]
+      };
+      var manifestUrl = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
+      el.manifestLink.href = manifestUrl;
+      el.appleTouchIcon.href = iconUrl;
+      el.faviconIcon.href = iconUrl;
+    }
+
+    function updateInstallUI() {
+      var isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+      if (isStandalone || window.navigator.standalone) {
+        el.installBtn.disabled = true;
+        el.installBtn.textContent = 'Ja instal·lada';
+        el.installHint.textContent = 'La tens preparada com una mini app del dispositiu.';
+        return;
+      }
+      if (deferredInstallPrompt) {
+        el.installBtn.disabled = false;
+        el.installBtn.textContent = 'Instal·la';
+        el.installHint.textContent = 'Toca el botó i el dispositiu et guiarà per afegir-la.';
+        return;
+      }
+      el.installBtn.disabled = false;
+      el.installBtn.textContent = 'Afegeix-la';
+      el.installHint.textContent = 'Si no surt el diàleg automàtic, usa “Comparteix” o el menú del navegador per afegir-la a l\'inici.';
+    }
 
     /* ── Persistence ── */
     function save() {
@@ -856,12 +1251,145 @@
     }
 
     /* ── Innovamat-style operation display ── */
-    function renderVerticalOp(answerState) {
+    function renderPaperOperation(answerState, userValue) {
+      ensurePaperNotes();
+      var cols = paperColumnCount();
+      var sign = state.mode === 'sumes' ? '+' : state.mode === 'restes' ? '−' : '×';
+      var topHelp = state.mode === 'sumes'
+        ? 'Toca una casella petita per apuntar el número que et portes a la columna següent.'
+        : state.mode === 'restes'
+          ? 'Toca una casella petita per apuntar la desena o centena que demanes en fer la resta.'
+          : 'Toca una casella petita per apuntar el que et portes mentre vas multiplicant per columnes.';
+      var resultText = answerState === 'correct'
+        ? String(state.answer)
+        : String(userValue !== undefined && userValue !== null ? userValue : (el.answerInput.value || ''));
+      var aDigits = alignDigits(state.a, cols);
+      var bDigits = alignDigits(state.b, cols);
+      var resultDigits = alignDigits(resultText, cols);
+      var answerClass = answerState === 'correct' ? ' correct' : answerState === 'wrong' ? ' wrong' : '';
+      var html = '';
+
+      html += '<div class="paper-op">';
+      html += '<div class="paper-topline">';
+      html += '<div class="paper-kicker">' + (state.mode === 'sumes' ? 'Portar-ne' : state.mode === 'restes' ? 'Préstec' : 'Passos') + '</div>';
+      html += '<div class="paper-help">' + topHelp + '</div>';
+      html += '</div>';
+      html += '<div class="paper-grid" style="grid-template-columns:34px repeat(' + cols + ',46px)">';
+      html += '<div class="paper-sign"></div>';
+      for (var n = 0; n < cols; n++) {
+        var noteCls = 'paper-cell note' + (noteValue(n) ? ' filled' : ' empty');
+        if (state.paperFocusKind === 'note' && state.paperFocusIndex === n) noteCls += ' active';
+        html += '<button type="button" class="' + noteCls + '" data-paper-note-index="' + n + '">' + (noteValue(n) || '') + '</button>';
+      }
+      html += '<div class="paper-sign"></div>';
+      for (var i = 0; i < cols; i++) html += '<div class="paper-cell' + (aDigits[i] ? '' : ' empty') + '">' + (aDigits[i] || '') + '</div>';
+      html += '<div class="paper-sign">' + sign + '</div>';
+      for (var j = 0; j < cols; j++) html += '<div class="paper-cell' + (bDigits[j] ? '' : ' empty') + '">' + (bDigits[j] || '') + '</div>';
+      html += '<div class="paper-line"></div>';
+      html += '<div class="paper-sign"></div>';
+      for (var k = 0; k < cols; k++) {
+        var display = resultDigits[k] || '';
+        html += '<button type="button" class="paper-cell answer' + answerClass + (display ? '' : ' empty') + '" data-paper-answer-index="' + k + '">' + display + '</button>';
+      }
+      html += '</div>';
+      html += '<div class="paper-answer-label">' + (state.mode === 'multiplicacions'
+        ? 'Escriu el resultat al camp de sota i fes servir les caselles petites per apuntar els passos o les que et portes.'
+        : 'Escriu el resultat al camp de sota i fes servir les petites de dalt per portar-ne.') + '</div>';
+      html += '</div>';
+
+      el.verticalOp.innerHTML = html;
+      el.verticalOp.className = 'innova-op';
+      el.verticalOp.setAttribute('data-op-a', String(state.a));
+      el.verticalOp.setAttribute('data-op-b', String(state.b));
+    }
+
+    function renderPaperWorkspace(answerState, userValue) {
+      ensurePaperNotes();
+      ensurePaperPartials();
+      syncPaperAnswerFromInput();
+      var cols = paperColumnCount();
+      var sign = state.mode === 'sumes' ? '+' : state.mode === 'restes' ? '&minus;' : '&times;';
+      var topHelp = state.mode === 'sumes'
+        ? 'Toca una casella petita per apuntar el nÃºmero que et portes a la columna segÃ¼ent.'
+        : state.mode === 'restes'
+          ? 'Toca una casella petita per apuntar la desena o centena que demanes en fer la resta.'
+          : 'Fes la multiplicaciÃ³ llarga: una lÃ­nia parcial per cada xifra de sota i suma final al final.';
+      var resultText = answerState === 'correct'
+        ? String(state.answer)
+        : String(userValue !== undefined && userValue !== null ? userValue : (el.answerInput.value || ''));
+      var aDigits = alignDigits(state.a, cols);
+      var bDigits = alignDigits(state.b, cols);
+      var resultDigits = answerState === 'correct' || answerState === 'wrong'
+        ? alignDigits(resultText, cols)
+        : (state.paperAnswerDigits || alignDigits(resultText, cols));
+      var answerClass = answerState === 'correct' ? ' correct' : answerState === 'wrong' ? ' wrong' : '';
+      var html = '';
+
+      html += '<div class="paper-op">';
+      html += '<div class="paper-topline">';
+      html += '<div class="paper-kicker">' + (state.mode === 'sumes' ? 'Portar-ne' : state.mode === 'restes' ? 'PrÃ©stec' : 'Parcials') + '</div>';
+      html += '<div class="paper-help">' + topHelp + '</div>';
+      html += '</div>';
+      html += '<div class="paper-grid" style="grid-template-columns:34px repeat(' + cols + ',46px)">';
+      html += '<div class="paper-sign"></div>';
+      for (var n = 0; n < cols; n++) {
+        var noteCls = 'paper-cell note' + (noteValue(n) ? ' filled' : ' empty');
+        if (state.paperFocusKind === 'note' && state.paperFocusIndex === n) noteCls += ' active';
+        html += '<button type="button" class="' + noteCls + '" data-paper-note-index="' + n + '">' + (noteValue(n) || '') + '</button>';
+      }
+      html += '<div class="paper-sign"></div>';
+      for (var i = 0; i < cols; i++) html += '<div class="paper-cell' + (aDigits[i] ? '' : ' empty') + '" data-paper-row="a">' + (aDigits[i] || '') + '</div>';
+      html += '<div class="paper-sign">' + sign + '</div>';
+      for (var j = 0; j < cols; j++) html += '<div class="paper-cell' + (bDigits[j] ? '' : ' empty') + '" data-paper-row="b">' + (bDigits[j] || '') + '</div>';
+      html += '<div class="paper-line"></div>';
+      if (state.mode === 'multiplicacions') {
+        var partialRows = paperPartialRowCount();
+        for (var row = 0; row < partialRows; row++) {
+          var shift = row;
+          var width = Math.max(cols - shift, 1);
+          var partialDigits = alignDigits(partialValue(row), width);
+          html += '<div class="paper-mini-label">' + (row + 1) + '</div>';
+          for (var col = 0; col < cols; col++) {
+            if (col >= width) {
+              html += '<div class="paper-cell blocked"></div>';
+              continue;
+            }
+            var partialCls = 'paper-cell partial' + (partialDigits[col] ? '' : ' empty');
+            if (state.paperFocusKind === 'partial' && state.paperFocusRow === row && state.paperFocusIndex === col) partialCls += ' active';
+            html += '<button type="button" class="' + partialCls + '" data-paper-partial-row="' + row + '" data-paper-partial-index="' + col + '">' + (partialDigits[col] || '') + '</button>';
+          }
+        }
+        if (partialRows > 1) html += '<div class="paper-row-divider"></div>';
+      }
+      html += '<div class="paper-sign"></div>';
+      for (var k = 0; k < cols; k++) {
+        var display = resultDigits[k] || '';
+        var resultCls = 'paper-cell answer' + answerClass + (display ? '' : ' empty');
+        if (state.paperFocusKind === 'answer' && state.paperFocusIndex === k) resultCls += ' active';
+        html += '<button type="button" class="' + resultCls + '" data-paper-answer-index="' + k + '">' + display + '</button>';
+      }
+      html += '</div>';
+      html += '<div class="paper-answer-label">' + (state.mode === 'multiplicacions'
+        ? 'Omple les lÃ­nies parcials i el resultat final tocant les caselles, o escriu-lo al camp si et va millor.'
+        : 'Toca les caselles petites de dalt per portar-ne i les de baix per escriure o corregir el resultat.') + '</div>';
+      html += '</div>';
+
+      el.verticalOp.innerHTML = html;
+      el.verticalOp.className = 'innova-op';
+      el.verticalOp.setAttribute('data-op-a', String(state.a));
+      el.verticalOp.setAttribute('data-op-b', String(state.b));
+    }
+
+    function renderVerticalOp(answerState, userValue) {
+      if (usesPaperAlgorithm()) {
+        renderPaperWorkspace(answerState, userValue);
+        return;
+      }
       /* answerState: 'pending' | 'correct' | 'wrong' */
       var signs = { sumes: '+', restes: '−', multiplicacions: '×' };
       var sign = signs[state.mode] || '+';
 
-      var typed = el.answerInput.value;
+      var typed = userValue !== undefined && userValue !== null ? String(userValue) : el.answerInput.value;
       var resultText = answerState === 'correct' ? String(state.answer)
                      : answerState === 'wrong'   ? (typed || '?')
                      : (typed || '?');
@@ -1292,8 +1820,9 @@
     }
 
     /* ── Answer mode switching ── */
-    function renderAnswerMode() {
+    function renderAnswerModeLegacy() {
       el.optionButtons.innerHTML = '';
+      updatePracticeTypeUI();
       if (state.mode === 'divisions') {
         el.standardPanel.className = 'hidden';
         el.divisionTrainer.className = 'division-trainer';
@@ -1306,7 +1835,7 @@
       el.problemText.className = 'big-problem hidden';
 
       /* Restes VOP (tap mode) — only for numbers ≤ 99 */
-      if (state.mode === 'restes' && state.a <= 99) {
+      if (guidedSubtractionActive()) {
         initVop();
         renderRestesVop();
         el.answerInputPanel.className = 'hidden';
@@ -1315,7 +1844,7 @@
       }
 
       /* Sumes VOP (step input mode) */
-      if (state.mode === 'sumes') {
+      if (guidedAdditionActive()) {
         initVop();
         renderSumesVop();
         el.answerInputPanel.className = '';
@@ -1326,6 +1855,49 @@
       /* Multiplicacions (and large-number restes) — static display */
       renderVerticalOp('pending');
       if (state.practiceType === 'resultat') {
+        el.answerInputPanel.className = '';
+        el.answerOptionsPanel.className = 'hidden';
+        return;
+      }
+      el.answerInputPanel.className = 'hidden';
+      el.answerOptionsPanel.className = '';
+      var correct = state.answer;
+      var opts = [correct];
+      while (opts.length < 4) {
+        var delta = rand(1, 10 + state.level * 5);
+        var sign = Math.random() > 0.5 ? 1 : -1;
+        var candidate = correct + delta * sign;
+        if (candidate < 0) candidate = Math.abs(candidate);
+        if (opts.indexOf(candidate) === -1) opts.push(candidate);
+      }
+      shuffle(opts);
+      for (var i = 0; i < opts.length; i++) {
+        (function (value) {
+          var btn = document.createElement('button');
+          btn.className = 'secondary';
+          btn.style.cssText = 'min-width:110px;min-height:54px';
+          btn.textContent = String(value);
+          btn.onclick = function () { checkAnswer(value); };
+          el.optionButtons.appendChild(btn);
+        })(opts[i]);
+      }
+    }
+
+    function renderAnswerMode() {
+      el.optionButtons.innerHTML = '';
+      updatePracticeTypeUI();
+      if (state.mode === 'divisions') {
+        el.standardPanel.className = 'hidden';
+        el.divisionTrainer.className = 'division-trainer';
+        el.verticalOp.className = 'vertical-op hidden';
+        resetDivisionTrainer();
+        return;
+      }
+      el.divisionTrainer.className = 'division-trainer hidden';
+      el.standardPanel.className = '';
+      el.problemText.className = 'big-problem hidden';
+      renderVerticalOp('pending');
+      if (state.practiceType === 'resultat' || state.practiceType === 'manual') {
         el.answerInputPanel.className = '';
         el.answerOptionsPanel.className = 'hidden';
         return;
@@ -1366,7 +1938,7 @@
         text = a + ' + ' + b + ' = ?';
         hint = 'Pots comptar, agrupar o fer-ho mentalment.';
       } else if (state.mode === 'restes') {
-        a = rand(r[0], r[1]); b = rand(r[0], r[1]);
+        a = rand(Math.max(1, r[0]), r[1]); b = rand(Math.max(1, r[0]), r[1]);
         if (b > a) { var t = a; a = b; b = t; }
         answer = a - b;
         text = a + ' − ' + b + ' = ?';
@@ -1396,6 +1968,7 @@
       }
 
       state.a = a; state.b = b; state.answer = answer; state.remainder = remainder;
+      resetPaperWorkspace();
       el.opBadge.textContent = modeLabel(state.mode);
       /* Divisions show inline text; others use vertical format */
       el.problemText.className = state.mode === 'divisions' ? 'big-problem' : 'big-problem hidden';
@@ -1424,7 +1997,7 @@
           state.medals += 1;
           el.dailyCheer.textContent = '🏅 Has arribat al tresor i has guanyat una medalla!';
         }
-        if (state.mode === 'multiplicacions') renderVerticalOp('correct');
+        if (usesPaperAlgorithm() || state.mode === 'multiplicacions') renderVerticalOp('correct', user);
         launchConfetti();
         el.feedback.className = 'feedback good';
         el.feedback.textContent = correctMessage();
@@ -1432,7 +2005,7 @@
         setTimeout(generateProblem, 2500);
       } else {
         state.misses += 1; state.streak = 0;
-        if (state.mode === 'multiplicacions') renderVerticalOp('wrong');
+        if (usesPaperAlgorithm() || state.mode === 'multiplicacions') renderVerticalOp('wrong', user);
         el.feedback.className = 'feedback bad';
         el.feedback.textContent = 'No passa res. Ho tornem a provar.';
         renderStats(); save();
@@ -1480,22 +2053,30 @@
       el.practiceType.onchange = function () { state.practiceType = this.value; save(); renderAnswerMode(); };
       el.soundToggle.onchange = function () { state.sound = this.value; save(); };
       el.newExerciseBtn.onclick = generateProblem;
-      el.checkBtn.onclick = function () {
-        if (state.mode === 'sumes') { submitVopStep(); } else { checkAnswer(); }
-      };
+      el.checkBtn.onclick = function () { checkAnswer(); };
       el.placeDivisionBtn.onclick = placeDivisionValue;
       el.undoDivisionBtn.onclick = undoDivisionValue;
       el.checkDivisionProcessBtn.onclick = validateDivisionProcess;
       el.divisionInput.onkeydown = function (e) { if ((e || window.event).keyCode === 13) placeDivisionValue(); };
       el.answerInput.onkeydown = function (e) {
-        if ((e || window.event).keyCode === 13) {
-          if (state.mode === 'sumes') { submitVopStep(); } else { checkAnswer(); }
-        }
+        if ((e || window.event).keyCode === 13) checkAnswer();
       };
       el.answerInput.oninput = function () {
-        if (state.mode === 'multiplicacions') renderVerticalOp('pending');
+        if (usesPaperAlgorithm()) syncPaperAnswerFromInput();
+        if (usesPaperAlgorithm() || state.mode === 'multiplicacions') renderVerticalOp('pending');
       };
       el.celebrateBtn.onclick = function () { refreshMotivation(); };
+      el.installBtn.onclick = function () {
+        if (!deferredInstallPrompt) {
+          updateInstallUI();
+          return;
+        }
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.finally(function () {
+          deferredInstallPrompt = null;
+          updateInstallUI();
+        });
+      };
 
       /* Touch/click delegation for restes tally marks */
       el.verticalOp.addEventListener('touchend', function (e) {
@@ -1508,6 +2089,22 @@
       }, { passive: false });
       el.verticalOp.addEventListener('click', function (e) {
         var t = e.target;
+        var noteIndex = t && t.getAttribute && t.getAttribute('data-paper-note-index');
+        var answerIndex = t && t.getAttribute && t.getAttribute('data-paper-answer-index');
+        var partialRow = t && t.getAttribute && t.getAttribute('data-paper-partial-row');
+        var partialIndex = t && t.getAttribute && t.getAttribute('data-paper-partial-index');
+        if (noteIndex !== null && noteIndex !== undefined && noteIndex !== '') {
+          setPaperFocus('note', parseInt(noteIndex, 10));
+          return;
+        }
+        if (answerIndex !== null && answerIndex !== undefined && answerIndex !== '') {
+          setPaperFocus('answer', parseInt(answerIndex, 10));
+          return;
+        }
+        if (partialRow !== null && partialRow !== undefined && partialRow !== '' && partialIndex !== null && partialIndex !== undefined && partialIndex !== '') {
+          setPaperFocus('partial', parseInt(partialIndex, 10), parseInt(partialRow, 10));
+          return;
+        }
         var id = t && t.getAttribute && t.getAttribute('data-mark-id');
         if (id !== null && id !== undefined && id !== '') tapVopMark(parseInt(id, 10));
       });
@@ -1516,16 +2113,43 @@
       for (var k = 0; k < keys.length; k++) {
         keys[k].onclick = function () {
           var text = this.textContent;
+          if (handlePaperWorkspaceInput(text)) return;
           var target = state.mode === 'divisions' ? el.divisionInput : el.answerInput;
-          if (text === 'Esborra') { target.value = ''; return; }
-          if (text === '⌫') { target.value = target.value.slice(0, -1); return; }
+          if (text === 'Esborra') { target.value = ''; if (target === el.answerInput && usesPaperAlgorithm()) syncPaperAnswerFromInput(); if (target === el.answerInput && (usesPaperAlgorithm() || state.mode === 'multiplicacions')) renderVerticalOp('pending'); return; }
+          if (text === '⌫') { target.value = target.value.slice(0, -1); if (target === el.answerInput && usesPaperAlgorithm()) syncPaperAnswerFromInput(); if (target === el.answerInput && (usesPaperAlgorithm() || state.mode === 'multiplicacions')) renderVerticalOp('pending'); return; }
           if (text === '−') {
             target.value = target.value.indexOf('-') === 0 ? target.value.slice(1) : '-' + target.value;
+            if (target === el.answerInput && usesPaperAlgorithm()) syncPaperAnswerFromInput();
+            if (target === el.answerInput && (usesPaperAlgorithm() || state.mode === 'multiplicacions')) renderVerticalOp('pending');
             return;
           }
           target.value += text;
+          if (target === el.answerInput && usesPaperAlgorithm()) syncPaperAnswerFromInput();
+          if (target === el.answerInput && (usesPaperAlgorithm() || state.mode === 'multiplicacions')) renderVerticalOp('pending');
         };
       }
+
+      window.addEventListener('keydown', function (e) {
+        if (!usesPaperAlgorithm()) return;
+        if (state.paperFocusKind !== 'note' && state.paperFocusKind !== 'answer' && state.paperFocusKind !== 'partial') return;
+        if (e.target === el.divisionInput) return;
+        var key = e.key || '';
+        if (/^\d$/.test(key) || key === 'Backspace' || key === 'Delete' || key === 'Escape') {
+          e.preventDefault();
+          handlePaperWorkspaceInput(key);
+        }
+      });
+
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        updateInstallUI();
+      });
+
+      window.addEventListener('appinstalled', function () {
+        deferredInstallPrompt = null;
+        updateInstallUI();
+      });
     }
 
     /* ── Dark mode ── */
@@ -1549,6 +2173,7 @@
 
     /* ── Init ── */
     function init() {
+      registerDynamicPwaAssets();
       load();
       el.level.value = String(state.level);
       el.practiceType.value = state.practiceType;
@@ -1557,6 +2182,7 @@
         if (localStorage.getItem('matekids-dark') === '1') applyDark(true);
       } catch (e) {}
       bindEvents();
+      updateInstallUI();
       refreshMotivation();
       renderStats();
       setMode(state.mode);
@@ -1565,9 +2191,6 @@
     init();
 
     /* ── Register Service Worker ── */
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
-    }
   })();
   </script>
 </body>
